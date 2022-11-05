@@ -1,2 +1,2 @@
 # Server
-The server-side of the LUNA project.
+The server of the LUNA project.
