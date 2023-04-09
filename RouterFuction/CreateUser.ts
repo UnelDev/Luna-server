@@ -4,7 +4,6 @@ import { User } from "../models/user";
 
 export default async function CreateUser(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
-	console.log(req.body);
 	if (typeof req.body != 'object' || Object.keys(req.body).length == 0) {
 		res.status(400).send({ status: 400, message: "specify username object" })
 		return;
