@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "cls && jest --watchAll",
+    "test": "jest --watchAll",
     "dev": "npx nodemon index.ts"
   },
   "author": "UnelDev",
