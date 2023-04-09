@@ -27,12 +27,6 @@ jobs:
     - run: npm install
 
     - name: Run tests
-      run: npm test -- --coverage --coverageReporters=text-lcov | coveralls
-
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v2
-      with:
-        name: coverage-report
-        path: coverage/lcov.info
+      run: npm test
       env:
         CI: true
