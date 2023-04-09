@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --forceExit",
     "dev": "npx nodemon index.ts"
   },
   "author": "UnelDev",
