@@ -2,7 +2,7 @@ import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { User } from "../models/user";
 
-export default async function CreateUser(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function createUser(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 3) {
 		res.status(400).send({ status: 400, message: "specify user object" })

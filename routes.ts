@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { User } from './models/user';
 import testPassword from './RouterFuction/testPassword';
 import changePassword from './RouterFuction/changePassword';
-import CreateUser from './RouterFuction/createUser';
+import createUser from './RouterFuction/createUser';
 const router = Router();
 
 // GET /users
@@ -20,7 +20,7 @@ router.get('/testPassword', async (req, res) => {
 
 // POST /users
 router.post('/NewUsers', async (req, res) => {
-	const instance = await CreateUser(req, res);
+	const instance = await createUser(req, res);
 	if (instance) {
 		res.send(instance);
 	}
