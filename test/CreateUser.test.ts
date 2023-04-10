@@ -19,7 +19,7 @@ describe('POST /NewUsers', () => {
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
 		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify username object');
+		expect(res.body).toHaveProperty('message', 'specify user object');
 	});
 
 	it('should return a 400 if name is not a string', async () => {
