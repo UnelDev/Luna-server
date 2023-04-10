@@ -4,7 +4,7 @@ import { User } from "../models/user";
 
 export default async function testPassword(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
-	if (typeof req.body != 'object' || Object.keys(req.body).length == 0) {
+	if (typeof req.body != 'object' || Object.keys(req.body).length != 2) {
 		res.status(400).send({ status: 400, message: "specify {email:string, password:sha512string} object" })
 		return;
 	}
@@ -18,7 +18,7 @@ export default async function testPassword(req: Request<{}, any, any, ParsedQs, 
 	}
 	const user = await User.findOne({ email: req.body.email });
 	if (!user) {
-		res.status(404).send({ status: 404, message: 'bad email' });
+		res.status(404).send({ status: 404, message: 'user not fond' });
 		return;
 	}
 	if (user.password == req.body.testPassword) {
