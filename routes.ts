@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { User } from './models/user';
-import CreateUser from './RouterFuction/CreateUser';
 import testPassword from './RouterFuction/testPassword';
 import changePassword from './RouterFuction/changePassword';
+import CreateUser from './RouterFuction/createUser';
 const router = Router();
 
 // GET /users

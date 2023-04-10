@@ -6,7 +6,7 @@ export default async function changePassword(req: Request<{}, any, any, ParsedQs
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 	//verify information
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 3) {
-		res.status(400).send({ status: 400, message: "specify {email:string, oldPassword:sha512string} object" })
+		res.status(400).send({ status: 400, message: "specify {email:string, oldPassword:sha512string, newPassword:sha512String} object" })
 		return;
 	}
 	if (!req.body.email || typeof req.body.email != 'string') {
@@ -23,7 +23,7 @@ export default async function changePassword(req: Request<{}, any, any, ParsedQs
 		return;
 	}
 	if (user.password != req.body.oldPassword) {
-		res.status(400).send({ status: 400, message: 'bad old password' });
+		res.status(403).send({ status: 403, message: 'bad old password' });
 		return;
 	}
 
