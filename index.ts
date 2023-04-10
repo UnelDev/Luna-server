@@ -15,7 +15,7 @@ async function startServer() {
 
 	const db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'Connection error:'));
-	db.once('open', () => {
+	db.once('connected', () => {
 		console.log('Connected to MongoDB!');
 	});
 	const app = express();
@@ -34,4 +34,5 @@ async function startServer() {
 	serverStarted = true;
 }
 
+startServer();
 export default startServer;

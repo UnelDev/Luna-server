@@ -1,12 +1,20 @@
 import { Router } from 'express';
 import { User } from './models/user';
 import CreateUser from './RouterFuction/CreateUser';
+import testPassword from './RouterFuction/testPassword';
 const router = Router();
 
 // GET /users
 router.get('/users', async (req, res) => {
 	const users = await User.find();
 	res.send(users);
+});
+
+router.get('/testPassword', async (req, res) => {
+	const instance = await testPassword(req, res);
+	if (instance) {
+		res.send(instance);
+	}
 });
 
 // POST /users
