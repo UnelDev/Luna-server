@@ -1,21 +1,23 @@
 import request from 'supertest';
 import { User } from '../models/user';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 
 const req = request('http://localhost:8082');
 
 beforeAll(async () => {
-	await mongoose.connect('mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	await mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
 });
 
 afterEach(async () => {
 	await User.deleteOne({ email: 'testCreateUser@example.com' });
 });
 
-describe('POST /NewUsers', () => {
+describe('POST /newUsers', () => {
 	it('should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
 		expect(res.body).toHaveProperty('status', 400);
@@ -24,7 +26,7 @@ describe('POST /NewUsers', () => {
 
 	it('should return a 400 if name is not a string', async () => {
 		const res = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 123,
 				email: 'testCreateUser@example.com',
@@ -37,7 +39,7 @@ describe('POST /NewUsers', () => {
 
 	it('should return a 400 if email is not a string', async () => {
 		const res = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 123,
@@ -50,7 +52,7 @@ describe('POST /NewUsers', () => {
 
 	it('should return a 400 if email is empty', async () => {
 		const res = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: '',
@@ -63,7 +65,7 @@ describe('POST /NewUsers', () => {
 
 	it('should return a 400 if password is not a SHA512 string', async () => {
 		const res = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -76,7 +78,7 @@ describe('POST /NewUsers', () => {
 
 	it('should return a 409 if a user with the same email already exists', async () => {
 		const res1 = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -85,7 +87,7 @@ describe('POST /NewUsers', () => {
 		expect(res1.status).toEqual(200);
 
 		const res2 = await req
-			.post('/api/NewUsers')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',

@@ -1,11 +1,13 @@
 import request from 'supertest';
 import { User } from '../models/user';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 
 const req = request('http://localhost:8082');
 
 beforeAll(async () => {
-	await mongoose.connect('mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	await mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
 });
 
 beforeEach(async () => {

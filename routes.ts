@@ -14,10 +14,12 @@ router.get('/users', async (req, res) => {
 });
 
 // POST /login
-router.post('/login', Login);
+router.post('/login', async (req, res) => {
+	await Login(req, res);
+});
 
 // POST /users
-router.post('/NewUsers', async (req, res) => {
+router.post('/newUsers', async (req, res) => {
 	const instance = await createUser(req, res);
 	if (instance) {
 		res.send(instance);
