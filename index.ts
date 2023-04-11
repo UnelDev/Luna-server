@@ -1,5 +1,7 @@
+import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
+
 import router from './routes';
 
 let serverStarted = false;
@@ -22,6 +24,7 @@ async function startServer() {
 	const port = 8082;
 	// Middleware pour analyser le corps des requêtes HTTP
 	app.use(express.json());
+	app.use(cors());
 
 	// Utilisation du routeur pour les routes de l'API
 	app.use('/api', router);
