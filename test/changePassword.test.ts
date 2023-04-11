@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { User } from '../models/user';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 
 const req = request('http://localhost:8082');
 
