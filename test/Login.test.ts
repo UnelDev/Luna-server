@@ -21,71 +21,65 @@ afterEach(async () => {
 	await User.deleteOne({ email: 'testPassword@example.com' });
 });
 
-describe('GET /testPassword', () => {
-	it('should return a 400 if request body is not an object', async () => {
+describe('POST /Login', () => {
+	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.post('/api/Login')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, password:sha512string} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
 	});
 
-	it('should return a 400 if key email is not give', async () => {
+	it('Should return a 400 if email is not define', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.get('/api/Login')
 			.send({
 				testPassword: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, password:sha512string} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
 	});
 
-	it('should return a 400 if key testPassword is not give', async () => {
+	it('Should return a 400 if password is not define', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.get('/api/Login')
 			.send({
 				email: 'testPassword@example.com',
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, password:sha512string} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
 	});
 
-	it('should return a 400 if email is not a string', async () => {
+	it('Should return a 400 if email is not a string', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.get('/api/Login')
 			.send({
 				email: 123,
-				testPassword: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
+				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'email must be a string');
+		expect(res.body).toHaveProperty('message', 'Email must be a string');
 	});
 
-	it('should return a 400 if password is not a sha512 string', async () => {
+	it('Should return a 400 if password is not a sha512 string', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.get('/api/Login')
 			.send({
 				email: 'testPassword@example.com',
-				testPassword: 'bad password'
+				password: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
 		expect(res.body).toHaveProperty('message', 'the testPassword must be sha512');
 	});
 
-	it('should return a 404 if email is not link at user', async () => {
+	it('Should return a 404 if email is not link to a user', async () => {
 		const res = await req
-			.get('/api/testPassword')
+			.get('/api/Login')
 			.send({
 				email: 'example@example.com',
 				testPassword: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('status', 404);
-		expect(res.body).toHaveProperty('message', 'user not fond');
+		expect(res.body).toHaveProperty('message', 'User not found');
 	});
 });
