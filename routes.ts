@@ -4,6 +4,7 @@ import Login from './RouterFuction/Login';
 import changePassword from './RouterFuction/changePassword';
 import createUser from './RouterFuction/createUser';
 import { User } from './models/user';
+import createAdmin from './RouterFuction/createAdmin';
 
 const router = Router();
 
@@ -21,6 +22,13 @@ router.post('/login', async (req, res) => {
 // POST /users
 router.post('/newUsers', async (req, res) => {
 	const instance = await createUser(req, res);
+	if (instance) {
+		res.send(instance);
+	}
+});
+
+router.post('/newAdmin', async (req, res) => {
+	const instance = await createAdmin(req, res);
 	if (instance) {
 		res.send(instance);
 	}
