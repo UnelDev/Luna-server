@@ -1,30 +1,27 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { Admin } from "../models/admin";
-import { User } from "../models/user";
 
 export default async function createAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 
-
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 4) {
-		res.status(400).send({ status: 400, message: "specify Admin object" });
+		res.status(400).send({ status: 400, message: "specify admin object" });
 		return;
 	}
 
 	if (typeof req.body.login != 'object' || Object.keys(req.body.login).length != 2) {
-		res.status(400).send({ status: 400, message: "specify Login object" });
+		res.status(400).send({ status: 400, message: "specify login object" });
 		return;
 	}
 
-	if (await User.findOne({ email: req.body.login.email }) == null) {
-		console.log(await User.findOne({ email: req.body.login.email }));
-		res.status(404).send({ status: 404, message: "user login not found" });
+	if (await Admin.findOne({ email: req.body.login.email }) == null) {
+		res.status(404).send({ status: 404, message: "Admin login not found" });
 		return;
 	}
 
-	if ((await User.findOne({ email: req.body.login.email })).password != req.body.login.password) {
-		res.status(400).send({ status: 400, message: "bad login password" });
+	if ((await Admin.findOne({ email: req.body.login.email })).password != req.body.login.password) {
+		res.status(403).send({ status: 403, message: "bad login password" });
 		return;
 	}
 
