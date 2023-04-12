@@ -27,11 +27,7 @@ jobs:
     - run: npm install
 
     - name: Create .env file
-      uses: actions/create-file@v1
-      with:
-        path: .env
-        content: |
-          URI=${{ secrets.URI }}
+      run:  echo -n "URI=${{ secrets.URI }}" > .env
 
     - name: Run tests
       run: npm test
