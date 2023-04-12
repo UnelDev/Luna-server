@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import router from './routes';
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
+dotenv.config();
 
 let serverStarted = false;
 
@@ -12,8 +12,7 @@ async function startServer() {
 		console.log('Server already started!');
 		return;
 	}
-	mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
-
+	await mongoose.connect(process.env.URI);
 
 	const db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'Connection error:'));

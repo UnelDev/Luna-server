@@ -26,6 +26,13 @@ jobs:
 
     - run: npm install
 
+    - name: Create .env file
+      uses: actions/create-file@v1
+      with:
+        path: .env
+        content: |
+          URI=${{ secrets.URI }}
+
     - name: Run tests
       run: npm test
       env:

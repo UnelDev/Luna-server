@@ -1,11 +1,13 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
 import { Admin } from '../models/admin';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const req = request('http://localhost:8082');
 
 beforeAll(async () => {
-	await mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
 		name: 'testAdmin',
 		email: 'testAdmin@example.com',
@@ -19,7 +21,7 @@ afterAll(async () => {
 })
 
 beforeEach(async () => {
-	await mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
 		name: 'testdeletAdmin',
 		email: 'testdeletAdmin@example.com',
