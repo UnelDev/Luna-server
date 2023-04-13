@@ -6,6 +6,7 @@ import createUser from './RouterFuction/createUser';
 import { User } from './models/user';
 import createAdmin from './RouterFuction/createAdmin';
 import deletAdmin from './RouterFuction/deletAdmin';
+import deletUser from './RouterFuction/deletUser';
 
 const router = Router();
 
@@ -30,6 +31,13 @@ router.post('/newUsers', async (req, res) => {
 
 router.post('/newAdmin', async (req, res) => {
 	const instance = await createAdmin(req, res);
+	if (instance) {
+		res.send(instance);
+	}
+});
+
+router.post('/deletUser', async (req, res) => {
+	const instance = await deletUser(req, res);
 	if (instance) {
 		res.send(instance);
 	}
