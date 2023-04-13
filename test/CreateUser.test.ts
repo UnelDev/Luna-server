@@ -2,12 +2,12 @@ import request from 'supertest';
 import { User } from '../models/user';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
+dotenv.config();
 
 const req = request('http://localhost:8082');
 
 beforeAll(async () => {
-	await mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	await mongoose.connect(process.env.URI);
 });
 
 afterEach(async () => {
@@ -98,4 +98,23 @@ describe('POST /newUsers', () => {
 		expect(res2.body).toHaveProperty('message', 'User with email testCreateUser@example.com already exists');
 	});
 
+	it('should create user', async () => {
+		const res1 = await req
+			.post('/api/newUsers')
+			.send({
+				name: 'Test Create User',
+				email: 'testCreateUser@example.com',
+				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
+			});
+		expect(res1.status).toEqual(200);
+
+		const user = await User.findOne({ email: 'testCreateUser@example.com' });
+		let exist: boolean;
+		if (user) {
+			exist = true
+		} else {
+			exist = false;
+		}
+		expect(exist).toEqual(true);
+	});
 });

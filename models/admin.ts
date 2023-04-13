@@ -18,8 +18,6 @@ const AdminSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now()
 	},
-
-
 });
 
 

@@ -1,42 +1,36 @@
-import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import router from './routes';
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
+let started = false;
 
-let serverStarted = false;
-
-async function startServer() {
-	if (serverStarted) {
-		console.log('Server already started!');
+export default function startServer() {
+	if (started) {
+		console.log('server already started');
 		return;
 	}
-	mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0');
+	started = true;
+	// Connect to MongoDB using Mongoose
+	mongoose.connect(process.env.URI)
+		.then(() => {
+			console.log('Successfully connected to MongoDB');
+		}).catch((error) => {
+			console.log('Error connecting to MongoDB:', error);
+		});
 
-
-	const db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'Connection error:'));
-	db.once('connected', () => {
-		console.log('Connected to MongoDB!');
-	});
+	// Create an instance of the Express app
 	const app = express();
-	const port = 8082;
-
-
 	app.use(express.json());
 	app.use(cors());
-
-
 	app.use('/api', router);
 
-
-	app.listen(port, async () => {
-		console.log(`Server started at http://localhost:${port}`);
+	// Start the Express app
+	const port = 8082;
+	app.listen(port, () => {
+		console.log(`Example app listening at http://localhost:${port}`);
 	});
-
-	serverStarted = true;
 }
 
 startServer();
-export default startServer;
