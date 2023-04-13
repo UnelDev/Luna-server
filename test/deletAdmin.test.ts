@@ -9,19 +9,18 @@ const req = request('http://localhost:8082');
 beforeAll(async () => {
 	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
-		name: 'testAdmin',
-		email: 'testAdmin@example.com',
+		name: 'testAdminMaster',
+		email: 'testAdminMaster@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await admin.save();
 });
 
 afterAll(async () => {
-	await Admin.deleteOne({ email: 'testAdmin@example.com' });
+	await Admin.deleteOne({ email: 'testAdminMaster@example.com' });
 })
 
 beforeEach(async () => {
-	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
 		name: 'testdeletAdmin',
 		email: 'testdeletAdmin@example.com',
@@ -77,7 +76,7 @@ describe('POST /deletAdmin', () => {
 			.send({
 				email: 'testDeletAdmin@example.com',
 				login: {
-					"email": "testAdmin@example.com",
+					"email": "testAdminMaster@example.com",
 					"password": "bad"
 				}
 			});
@@ -92,7 +91,7 @@ describe('POST /deletAdmin', () => {
 			.send({
 				email: 1234,
 				login: {
-					"email": "testAdmin@example.com",
+					"email": "testAdminMaster@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -107,7 +106,7 @@ describe('POST /deletAdmin', () => {
 			.send({
 				email: 'testDeletAdmin@example.com',
 				login: {
-					"email": "testAdmin@example.com",
+					"email": "testAdminMaster@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
