@@ -21,6 +21,12 @@ jobs:
         
     - run: npm install
 
+    - name: create .env
+    uses: du5rte/create-secrets-file@v1
+    with:
+    secrets: |
+      URI=${{ secrets.URI }}
+    
     - name: Run tests
       run: npm test
       env:
