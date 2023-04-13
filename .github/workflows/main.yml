@@ -21,11 +21,6 @@ jobs:
         
     - run: npm install
 
-    - name: Create .env file
-      uses: ozaytsev86/create-env-file@v1
-      with:
-        URI: ${{ secrets.URI }}
-
     - name: Run tests
       run: npm test
       env:
