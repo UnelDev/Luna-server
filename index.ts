@@ -13,6 +13,7 @@ export default function startServer() {
 	}
 	started = true;
 	// Connect to MongoDB using Mongoose
+	console.log(process.env.URI);
 	mongoose.connect(process.env.URI)
 		.then(() => {
 			console.log('Successfully connected to MongoDB');
