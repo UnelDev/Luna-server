@@ -20,10 +20,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - run: npm install
-
-    - name: Set up environment
-      env:
-        URI: ${{ secrets.URI }}
-
+    
     - name: Run tests
       run: npm test
