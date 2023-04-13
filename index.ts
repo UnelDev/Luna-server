@@ -29,7 +29,7 @@ export default function startServer() {
 	// Start the Express app
 	const port = 8082;
 	app.listen(port, () => {
-		console.log(`Example app listening at http://localhost:${port}`);
+		console.log(`listening at http://localhost:${port}`);
 	});
 }
 
