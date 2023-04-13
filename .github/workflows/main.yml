@@ -22,7 +22,9 @@ jobs:
     - run: npm install
 
     - name: Create .env file
-      run:  echo -n "URI=${{ secrets.URI }}" > .env
+            uses: ozaytsev86/create-env-file@v1
+            with:
+              URI: ${{ secrets.URI }}
 
     - name: Run tests
       run: npm test
