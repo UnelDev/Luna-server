@@ -24,4 +24,4 @@ const BoxSchema = new mongoose.Schema({
 });
 
 
-export const Box = mongoose.model('Admin', BoxSchema);
+export const Box = mongoose.model('Box', BoxSchema);
