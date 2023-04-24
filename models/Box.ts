@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+type nameOfUser = string;
+type timeToStart = Date;
 const BoxSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -10,7 +12,7 @@ const BoxSchema = new mongoose.Schema({
 		required: true
 	},
 	slot: {
-		type: Array<number | undefined>,
+		type: Array<[nameOfUser, timeToStart] | undefined>,
 		default: []
 	},
 	size: {

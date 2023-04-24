@@ -19,8 +19,10 @@ const userSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now()
 	},
-
-
+	timeOfUse: {
+		type: Number,
+		default: 0
+	}
 });
 
 // Création du modèle pour la collection "users"
