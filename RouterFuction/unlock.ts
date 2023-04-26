@@ -3,6 +3,7 @@ import { ParsedQs } from "qs";
 import CheckAdmin from "../function/checkAdmin";
 import { Box } from "../models/Box";
 import { Document, Types } from "mongoose";
+import { User } from "../models/user";
 
 /*
 **{
@@ -33,8 +34,8 @@ export default async function unlock(req: Request<{}, any, any, ParsedQs, Record
 
 	if (typeof req.body.IDOfUser != 'string') {
 		res.status(400).send({ message: 'IDOfUser must be a string' });
+		return;
 	}
-
 	if (req.body.name) {
 		if (req.body.id) {
 			res.status(400).send({ message: 'the id is specified but name is already specified, you have to specify only id or name. Prefer the id' });
@@ -42,6 +43,11 @@ export default async function unlock(req: Request<{}, any, any, ParsedQs, Record
 		}
 		if (typeof req.body.name != 'string') {
 			res.status(400).send({ message: 'the name must be a string' });
+			return;
+		}
+		const user = await User.findOne({ email: req.body.name });
+		if (!user) {
+			res.status(404).send({ message: 'user not found' });
 			return;
 		}
 
@@ -57,6 +63,11 @@ export default async function unlock(req: Request<{}, any, any, ParsedQs, Record
 			res.status(400).send({ message: 'the id must be a string' });
 			return;
 		}
+		const user = await User.findById(req.body.IDOfUser);
+		if (!user) {
+			res.status(404).send({ message: 'user not found' });
+			return;
+		}
 		const response = await find(req.body.id, req.body.numberOfSlot, req.body.IDOfUser);
 		res.status(response.code).send({ message: response.message });
 
@@ -68,7 +79,6 @@ export default async function unlock(req: Request<{}, any, any, ParsedQs, Record
 }
 
 async function find(key: { name: string } | String, slotNumber: number, id: string) {
-	console.log({ key });
 	let box: Document<unknown, {}, { name: string; placment: string; slot: any[]; size: number; createdAt: Date; }> & Omit<{ name: string; placment: string; slot: any[]; size: number; createdAt: Date; } & { _id: Types.ObjectId; }, never>;
 	if (typeof key == 'string') {
 		box = await Box.findById(key);
@@ -76,7 +86,7 @@ async function find(key: { name: string } | String, slotNumber: number, id: stri
 		box = await Box.findOne(key);
 	}
 	if (!box) {
-		return;
+		return { code: 404, message: 'box not found' };
 	}
 
 	if (slotNumber > box.slot.length) {
@@ -89,12 +99,6 @@ async function find(key: { name: string } | String, slotNumber: number, id: stri
 
 	box.slot[slotNumber] = [id, new Date()];
 	await box.save();
-
-	if (typeof key == 'string') {
-		box = await Box.findById(key);
-	} else if (typeof key == 'object') {
-		box = await Box.findOne(key);
-	}
 
 	return { code: 200, message: 'slot attributed with sucess' };
 }
