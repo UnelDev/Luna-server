@@ -8,7 +8,7 @@ import createAdmin from './RouterFuction/createAdmin';
 import deletAdmin from './RouterFuction/deletAdmin';
 import deletUser from './RouterFuction/deletUser';
 import CreateBox from './RouterFuction/createBox';
-import unlock from './RouterFuction/unlock';
+import unlock from './RouterFuction/lock';
 
 const router = Router();
 
