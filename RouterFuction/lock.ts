@@ -17,7 +17,7 @@ import { User } from "../models/user";
 **}
 */
 
-export default async function unlock(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function lock(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 4) {
 		res.status(400).send({ status: 400, message: "specify object" });
 		return;

@@ -42,7 +42,7 @@ router.post('/newBox', async (req, res) => {
 	await CreateBox(req, res);
 });
 
-router.post('/unlock', async (req, res) => {
+router.post('/lock', async (req, res) => {
 	await unlock(req, res);
 });
 
