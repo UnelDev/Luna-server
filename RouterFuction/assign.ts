@@ -17,7 +17,7 @@ import { User } from "../models/user";
 **}
 */
 
-export default async function unlock(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function assign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 4) {
 		res.status(400).send({ status: 400, message: "specify object" });
 		return;
@@ -45,7 +45,7 @@ export default async function unlock(req: Request<{}, any, any, ParsedQs, Record
 			res.status(400).send({ message: 'the name must be a string' });
 			return;
 		}
-		const user = await User.findOne({ email: req.body.name });
+		const user = await User.findOne({ email: req.body.IDOfUser });
 		if (!user) {
 			res.status(404).send({ message: 'user not found' });
 			return;

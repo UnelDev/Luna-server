@@ -8,7 +8,8 @@ import createAdmin from './RouterFuction/createAdmin';
 import deletAdmin from './RouterFuction/deletAdmin';
 import deletUser from './RouterFuction/deletUser';
 import CreateBox from './RouterFuction/createBox';
-import unlock from './RouterFuction/unlock';
+import unassign from './RouterFuction/unassign';
+import assign from './RouterFuction/assign';
 
 const router = Router();
 
@@ -42,8 +43,12 @@ router.post('/newBox', async (req, res) => {
 	await CreateBox(req, res);
 });
 
-router.post('/unlock', async (req, res) => {
-	await unlock(req, res);
+router.post('/assign', async (req, res) => {
+	await assign(req, res);
+});
+
+router.post('/unassign', async (req, res) => {
+	await unassign(req, res);
 });
 
 router.post('/deletUser', async (req, res) => {
