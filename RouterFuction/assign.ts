@@ -17,7 +17,7 @@ import { User } from "../models/user";
 **}
 */
 
-export default async function lock(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function assign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 4) {
 		res.status(400).send({ status: 400, message: "specify object" });
 		return;
@@ -100,5 +100,5 @@ async function find(key: { name: string } | String, slotNumber: number, id: stri
 	box.slot[slotNumber] = [id, new Date()];
 	await box.save();
 
-	return { code: 200, message: 'slot attributed with sucess' };
+	return { code: 200, message: 'slot assigned with sucess' };
 }
