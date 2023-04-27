@@ -1,9 +1,8 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+import { Admin } from "../models/admin";
 
-import { User } from "../models/user";
-
-export default async function Login(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function loginAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 2) {
@@ -24,9 +23,9 @@ export default async function Login(req: Request<{}, any, any, ParsedQs, Record<
 		return;
 	}
 
-	const user = await User.findOne({ email: email });
+	const user = await Admin.findOne({ email: email });
 	if (!user) {
-		res.status(404).send({ message: 'User not found' });
+		res.status(404).send({ message: 'Admin not found' });
 		return;
 	}
 

@@ -25,7 +25,7 @@ export default async function deletAdmin(req: Request<{}, any, any, ParsedQs, Re
 
 	const admin = await Admin.deleteOne({ email: req.body.email });
 	if (admin) {
-		return 'user ' + req.body.email + ' deleted';
+		return 'admin ' + req.body.email + ' deleted';
 	} else {
 		return 'error in deleting ' + req.body.email + ' user';
 	}

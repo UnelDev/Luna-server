@@ -8,7 +8,11 @@ import createAdmin from './RouterFuction/createAdmin';
 import deletAdmin from './RouterFuction/deletAdmin';
 import deletUser from './RouterFuction/deletUser';
 import CreateBox from './RouterFuction/createBox';
+import unassign from './RouterFuction/unassign';
 import assign from './RouterFuction/assign';
+import loginAdmin from './RouterFuction/LoginAdmin';
+import listBox from './RouterFuction/listBox';
+
 
 const router = Router();
 
@@ -23,6 +27,9 @@ router.post('/login', async (req, res) => {
 	await Login(req, res);
 });
 
+router.post('/loginAdmin', async (req, res) => {
+	await loginAdmin(req, res);
+});
 // POST /users
 router.post('/newUsers', async (req, res) => {
 	const instance = await createUser(req, res);
@@ -46,6 +53,10 @@ router.post('/assign', async (req, res) => {
 	await assign(req, res);
 });
 
+router.post('/unassign', async (req, res) => {
+	await unassign(req, res);
+});
+
 router.post('/deletUser', async (req, res) => {
 	const instance = await deletUser(req, res);
 	if (instance) {
@@ -58,6 +69,9 @@ router.post('/deletAdmin', async (req, res) => {
 	if (instance) {
 		res.send(instance);
 	}
+});
+router.post('/listBox', async (req, res) => {
+	await listBox(req, res);
 });
 
 router.put('/changePassword', async (req, res) => {

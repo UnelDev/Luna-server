@@ -47,11 +47,6 @@ export default async function CreateBox(req: Request<{}, any, any, ParsedQs, Rec
 			return;
 		}
 
-		if (!req.body.slot.every((item: any) => typeof item === 'string')) {
-			res.status(400).send({ status: 400, message: "the slot must contains the id of the user (string)" });
-			return;
-		}
-
 		if (req.body.slot.length != req.body.size) {
 			res.status(400).send({ status: 400, message: "the size of slot array is not equal of size argument" });
 			return;
