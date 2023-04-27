@@ -32,5 +32,5 @@ export default async function createUser(req: Request<{}, any, any, ParsedQs, Re
 		password: req.body.password
 	});
 	await user.save();
-	return 'User ' + user.email + ' created';
+	res.send('User ' + user.email + ' created');
 }

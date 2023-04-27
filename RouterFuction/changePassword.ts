@@ -29,7 +29,7 @@ export default async function changePassword(req: Request<{}, any, any, ParsedQs
 
 	//change password
 	if (!req.body.newPassword || req.body.newPassword.length != 128 || !regexSHA512.test(req.body.newPassword)) {
-		res.status(400).send({ status: 400, message: 'the newPassword must be sha512' })
+		res.status(400).send({ status: 400, message: 'the newPassword must be sha512' });
 		return;
 	}
 
@@ -38,6 +38,6 @@ export default async function changePassword(req: Request<{}, any, any, ParsedQs
 		{ password: req.body.newPassword }, // New value of the password field
 		{ new: true }, // Return the updated user instead of the old one
 	);
-
-	return 'new password is effective';
+	res.send({ status: 200, message: 'new password is effective' });
+	return;
 }
