@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { Admin } from '../models/admin';
+
 dotenv.config();
 
 const req = request('http://localhost:8082');
@@ -30,7 +31,7 @@ describe('Put /changeAdminPassword', () => {
 			.put('/api/changeAdminPassword')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, oldPassword:sha512string, newPassword:sha512String} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, oldPassword: Sha512 string, newPassword: sha512String }');
 	});
 
 	it('Should return a 400 if email is not define', async () => {
@@ -40,7 +41,7 @@ describe('Put /changeAdminPassword', () => {
 				changePassword: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, oldPassword:sha512string, newPassword:sha512String} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, oldPassword: Sha512 string, newPassword: sha512String }');
 	});
 
 	it('Should return a 400 if newPassword is not define', async () => {
@@ -51,7 +52,7 @@ describe('Put /changeAdminPassword', () => {
 				oldPassword: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, oldPassword:sha512string, newPassword:sha512String} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, oldPassword: Sha512 string, newPassword: sha512String }');
 	});
 
 	it('Should return a 400 if oldPassword is not define', async () => {
@@ -62,7 +63,7 @@ describe('Put /changeAdminPassword', () => {
 				newPassword: 'AA26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify {email:string, oldPassword:sha512string, newPassword:sha512String} object');
+		expect(res.body).toHaveProperty('message', 'Specify { email: string, oldPassword: Sha512 string, newPassword: sha512String }');
 	});
 
 	it('Should return a 400 if email is not a string', async () => {
@@ -74,7 +75,7 @@ describe('Put /changeAdminPassword', () => {
 				oldPassword: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'email must be a string');
+		expect(res.body).toHaveProperty('message', 'Email must be a string');
 	});
 
 	it('Should return a 400 if newPassword is not a sha512 string', async () => {
@@ -86,7 +87,7 @@ describe('Put /changeAdminPassword', () => {
 				newPassword: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'the newPassword must be sha512');
+		expect(res.body).toHaveProperty('message', 'NewPassword must be in sha512 format');
 	});
 
 	it('Should return a 400 if oldPassword is not a sha512 string', async () => {
@@ -98,7 +99,7 @@ describe('Put /changeAdminPassword', () => {
 				oldPassword: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'the oldPassword must be sha512');
+		expect(res.body).toHaveProperty('message', 'OldPassword must be in sha512 format');
 	});
 
 	it('Should return a 403 if oldPassword is wrong', async () => {
@@ -110,7 +111,7 @@ describe('Put /changeAdminPassword', () => {
 				oldPassword: 'FF26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('message', 'bad old password');
+		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
 	it('Should return a 404 if email is not link to an admin', async () => {
@@ -122,6 +123,6 @@ describe('Put /changeAdminPassword', () => {
 				oldPassword: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('message', 'user not fond');
+		expect(res.body).toHaveProperty('message', 'Admin not found');
 	});
 });

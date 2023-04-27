@@ -1,16 +1,19 @@
 import { Router } from 'express';
-import Login from './RouterFuction/Login';
-import changePassword from './RouterFuction/changePassword';
-import createUser from './RouterFuction/createUser';
+
 import { User } from './models/user';
+
+import Login from './RouterFuction/Login';
+import loginAdmin from './RouterFuction/LoginAdmin';
+import assign from './RouterFuction/assign';
+import changeAdminPassword from './RouterFuction/changeAdminPassword';
+import changePassword from './RouterFuction/changePassword';
 import createAdmin from './RouterFuction/createAdmin';
+import CreateBox from './RouterFuction/createBox';
+import createUser from './RouterFuction/createUser';
 import deletAdmin from './RouterFuction/deletAdmin';
 import deletUser from './RouterFuction/deletUser';
-import CreateBox from './RouterFuction/createBox';
-import unassign from './RouterFuction/unassign';
-import assign from './RouterFuction/assign';
-import loginAdmin from './RouterFuction/LoginAdmin';
 import listBox from './RouterFuction/listBox';
+import unassign from './RouterFuction/unassign';
 
 
 const router = Router();
@@ -34,6 +37,7 @@ router.post('/deletAdmin', deletAdmin);
 router.post('/listBox', listBox);
 
 router.put('/changePassword', changePassword);
+router.put('/changeAdminPassword', changeAdminPassword);
 
 // PUT /users/:id
 router.put('/users/:id', async (req, res) => {
