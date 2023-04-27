@@ -11,6 +11,7 @@ import CreateBox from './RouterFuction/createBox';
 import unassign from './RouterFuction/unassign';
 import assign from './RouterFuction/assign';
 import loginAdmin from './RouterFuction/LoginAdmin';
+import listBox from './RouterFuction/listBox';
 
 const router = Router();
 
@@ -67,6 +68,9 @@ router.post('/deletAdmin', async (req, res) => {
 	if (instance) {
 		res.send(instance);
 	}
+});
+router.post('/listBox', async (req, res) => {
+	await listBox(req, res);
 });
 
 router.put('/changePassword', async (req, res) => {
