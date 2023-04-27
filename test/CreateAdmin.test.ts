@@ -193,7 +193,6 @@ describe('POST /newAdmin', () => {
 				}
 			});
 		expect(res1.status).toEqual(200);
-
 		const admin = await Admin.findOne({ email: 'testCreateAdmin@example.com' });
 		let exist: boolean;
 		if (admin) {

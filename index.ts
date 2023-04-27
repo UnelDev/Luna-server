@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import router from './routes';
 import dotenv from 'dotenv';
+import fs from 'fs';
+
 dotenv.config({ path: '.env' });
 
 // Connect to MongoDB using Mongoose
@@ -21,5 +23,15 @@ app.use('/api', router);
 // Start the Express app
 const port = 8082;
 app.listen(port, () => {
-	console.log(`Listening at http://localhost:${port}`);
+	console.log(`listening at http://localhost:${port}`);
+});
+
+const readmeContent = fs.readFileSync('./README.md', 'utf-8');
+app.get('/', (req, res) => {
+	const content =
+		'╔═════════════════════════════════════════════════════════╗\n' +
+		'║ for more readability put this text in a markdown reader ║\n' +
+		'╚═════════════════════════════════════════════════════════╝\n\n\n\n' +
+		readmeContent;
+	res.type('markdown').send(content);
 });

@@ -10,8 +10,8 @@ const req = request('http://localhost:8082');
 beforeAll(async () => {
 	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
-		name: 'testAdminMaster',
-		email: 'testAdminMaster@example.com',
+		name: 'testlistBoxMaster',
+		email: 'testlistBoxMaster@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await admin.save();
@@ -26,20 +26,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	await Admin.deleteOne({ email: 'testAdminMaster@example.com' });
-})
-
-beforeEach(async () => {
-	const admin = new Admin({
-		name: 'testlistBox',
-		email: 'testlistBox@example.com',
-		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
-	});
-	await admin.save();
-});
-
-afterEach(async () => {
-	await Admin.deleteOne({ email: 'testlistBox@example.com' });
+	await Admin.deleteOne({ email: 'testlistBoxMaster@example.com' });
+	await Box.deleteOne({ name: 'listBoxTest' });
 })
 
 describe('POST /listBox', () => {
@@ -67,7 +55,7 @@ describe('POST /listBox', () => {
 			.post('/api/listBox')
 			.send({
 				login: {
-					"email": "badTestAdmin@example.com",
+					"email": "badtestlistBox@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -81,7 +69,7 @@ describe('POST /listBox', () => {
 			.post('/api/listBox')
 			.send({
 				login: {
-					"email": "testAdminMaster@example.com",
+					"email": "testlistBoxMaster@example.com",
 					"password": "bad"
 				}
 			});
@@ -95,7 +83,7 @@ describe('POST /listBox', () => {
 			.post('/api/listBox')
 			.send({
 				login: {
-					"email": "testAdminMaster@example.com",
+					"email": "testlistBoxMaster@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});

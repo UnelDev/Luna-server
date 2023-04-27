@@ -57,9 +57,9 @@ describe('POST /assign', () => {
 		const res = await req
 			.post('/api/assign')
 			.send({
-				name: 123,
-				email: 'assigntestAdmin@example.com',
-				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF',
+				name: "createBoxTest",
+				IDOfUser: "644671ba82dc1800c84992fc",
+				numberOfSlot: 3,
 				login: {}
 			});
 		expect(res.status).toEqual(400);
@@ -86,9 +86,9 @@ describe('POST /assign', () => {
 		const res = await req
 			.post('/api/assign')
 			.send({
-				name: 123,
-				email: 'assigntestAdmin@example.com',
-				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF',
+				name: "createBoxTest",
+				IDOfUser: "644671ba82dc1800c84992fc",
+				numberOfSlot: 3,
 				login: {
 					"email": "assigntestAdmin@example.com",
 					"password": "bad"
@@ -178,7 +178,7 @@ describe('POST /assign', () => {
 				}
 			});
 		expect(res.status).toEqual(200);
-		expect(res.body).toHaveProperty('message', 'slot attributed with sucess');
+		expect(res.body).toHaveProperty('message', 'slot assigned with sucess');
 		expect((await Box.findOne({ name: 'assignBoxTest' })).slot[1].length).toEqual(2);
 	});
 });

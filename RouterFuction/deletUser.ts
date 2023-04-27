@@ -26,8 +26,8 @@ export default async function deletUser(req: Request<{}, any, any, ParsedQs, Rec
 
 	const user = await User.deleteOne({ email: req.body.email });
 	if (user) {
-		return 'user ' + req.body.email + ' deleted';
+		res.send('user ' + req.body.email + ' deleted');
 	} else {
-		return 'error in deleting ' + req.body.email + ' user';
+		res.status(400).send('error in deleting ' + req.body.email + ' user');
 	}
 }

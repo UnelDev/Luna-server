@@ -25,7 +25,7 @@ export default async function listBox(req: Request<{}, any, any, ParsedQs, Recor
 
 	const allBox = await Box.find();
 	if (allBox) {
-		res.status(200).send(allBox);
+		res.send(allBox);
 	} else {
 		res.status(400).send({ message: 'error ocurred' });
 	}
