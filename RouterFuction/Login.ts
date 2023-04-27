@@ -30,7 +30,7 @@ export default async function Login(req: Request<{}, any, any, ParsedQs, Record<
 		return;
 	}
 
-	if (user.password == password) {
+	if (user.password.toUpperCase() == password.toUpperCase()) {
 		res.status(200).send({ message: 'Logged in !' });
 		return;
 	} else {
