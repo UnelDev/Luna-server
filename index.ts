@@ -1,10 +1,12 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import fs from 'fs';
 import mongoose from 'mongoose';
+import path from 'path';
 
 import router from './routes';
+
+dotenv.config({ path: '.env' });
 
 let started = false;
 
@@ -37,14 +39,8 @@ function main() {
 		console.log(`listening at http://localhost:${port}`);
 	});
 
-	const readmeContent = fs.readFileSync('./README.md', 'utf-8');
 	app.get('/', (req, res) => {
-		const content =
-			'╔═════════════════════════════════════════════════════════╗\n' +
-			'║ for more readability put this text in a markdown reader ║\n' +
-			'╚═════════════════════════════════════════════════════════╝\n\n\n\n' +
-			readmeContent;
-		res.type('markdown').send(content);
+		res.sendFile(path.resolve('./README.html'))
 	});
 }
 
