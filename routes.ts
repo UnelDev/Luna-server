@@ -10,6 +10,7 @@ import deletUser from './RouterFuction/deletUser';
 import CreateBox from './RouterFuction/createBox';
 import unassign from './RouterFuction/unassign';
 import assign from './RouterFuction/assign';
+import loginAdmin from './RouterFuction/LoginAdmin';
 
 const router = Router();
 
@@ -24,6 +25,9 @@ router.post('/login', async (req, res) => {
 	await Login(req, res);
 });
 
+router.post('/loginAdmin', async (req, res) => {
+	await loginAdmin(req, res);
+});
 // POST /users
 router.post('/newUsers', async (req, res) => {
 	const instance = await createUser(req, res);

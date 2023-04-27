@@ -128,7 +128,6 @@ describe('POST /unassign', () => {
 
 	it('unassign a lock', async () => {
 		const id = (await Box.findOne({ name: 'unassignBoxTest' })).id.valueOf();
-		const IDOfUser = (await User.findOne({ name: 'unassigntestUser' })).id.valueOf();
 		const res = await req
 			.post('/api/unassign')
 			.send({
