@@ -53,6 +53,10 @@ export default async function CreateBox(req: Request<{}, any, any, ParsedQs, Rec
 		}
 	}
 
+	if (await Box.findOne({ name: req.body.name })) {
+		res.status(400).send({ status: 400, message: "the box with this name already exist" });
+		return;
+	}
 	const created = new Box({
 		name: req.body.name,
 		placment: req.body.placment,

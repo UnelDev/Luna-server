@@ -30,7 +30,7 @@ export default async function loginAdmin(req: Request<{}, any, any, ParsedQs, Re
 	}
 
 	if (user.password.toUpperCase() == password.toUpperCase()) {
-		res.status(200).send({ message: 'Logged in !' });
+		res.send({ message: 'Logged in !' });
 		return;
 	} else {
 		res.status(400).send({ message: 'Wrong confidentials' });
