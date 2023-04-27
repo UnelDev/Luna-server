@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import Login from './RouterFuction/Login';
 import changePassword from './RouterFuction/changePassword';
 import createUser from './RouterFuction/createUser';
@@ -23,64 +22,18 @@ router.get('/users', async (req, res) => {
 });
 
 // POST /login
-router.post('/login', async (req, res) => {
-	await Login(req, res);
-});
+router.post('/login', Login);
+router.post('/loginAdmin', loginAdmin);
+router.post('/newUsers', createUser);
+router.post('/newAdmin', createAdmin);
+router.post('/newBox', CreateBox);
+router.post('/assign', assign);
+router.post('/unassign', unassign);
+router.post('/deletUser', deletUser);
+router.post('/deletAdmin', deletAdmin);
+router.post('/listBox', listBox);
 
-router.post('/loginAdmin', async (req, res) => {
-	await loginAdmin(req, res);
-});
-// POST /users
-router.post('/newUsers', async (req, res) => {
-	const instance = await createUser(req, res);
-	if (instance) {
-		res.send(instance);
-	}
-});
-
-router.post('/newAdmin', async (req, res) => {
-	const instance = await createAdmin(req, res);
-	if (instance) {
-		res.send(instance);
-	}
-});
-
-router.post('/newBox', async (req, res) => {
-	await CreateBox(req, res);
-});
-
-router.post('/assign', async (req, res) => {
-	await assign(req, res);
-});
-
-router.post('/unassign', async (req, res) => {
-	await unassign(req, res);
-});
-
-router.post('/deletUser', async (req, res) => {
-	const instance = await deletUser(req, res);
-	if (instance) {
-		res.send(instance);
-	}
-});
-
-router.post('/deletAdmin', async (req, res) => {
-	const instance = await deletAdmin(req, res);
-	if (instance) {
-		res.send(instance);
-	}
-});
-router.post('/listBox', async (req, res) => {
-	await listBox(req, res);
-});
-
-router.put('/changePassword', async (req, res) => {
-	const instance = await changePassword(req, res);
-	if (instance) {
-		res.send(instance);
-	}
-});
-
+router.put('/changePassword', changePassword);
 
 // PUT /users/:id
 router.put('/users/:id', async (req, res) => {
@@ -93,6 +46,5 @@ router.delete('/users/:email', async (req, res) => {
 	const user = await User.findOneAndDelete({ email: req.params.email });
 	res.send(user);
 });
-
 
 export default router;

@@ -39,5 +39,5 @@ export default async function createAdmin(req: Request<{}, any, any, ParsedQs, R
 		password: req.body.password
 	});
 	await admin.save();
-	return 'Admin ' + admin.email + ' created';
+	res.send('Admin ' + admin.email + ' created');
 }
