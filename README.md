@@ -124,6 +124,8 @@ other response : see [this](./RouterFuction/createBox.ts)
 
 ### url/api/assign
 
+type:
+
 ```json
 {
 	id: IdBox string,
@@ -141,6 +143,8 @@ other response see [this](./RouterFuction/assign.ts)
 
 ### url/api/unassign
 
+type:
+
 ```json
 {
 	id: IdBox string,
@@ -154,3 +158,33 @@ other response see [this](./RouterFuction/assign.ts)
 best response: slot unassigned with sucess
 
 other response see [this](./RouterFuction/unassign.ts)
+
+### url/api/login
+
+type:
+
+```json
+{
+	email: string,
+	password: sha512 string
+}
+```
+
+best response Logged in !
+
+other response see [this](./RouterFuction/Login.ts)
+
+### url/api/loginAdmin
+
+type:
+
+```json
+{
+	email: string,
+	password: sha512 string
+}
+```
+
+best response Logged in !
+
+other response see [this](./RouterFuction/LoginAdmin.ts)
