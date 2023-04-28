@@ -27,16 +27,15 @@ afterEach(async () => {
 });
 
 describe('POST /NewAdmin', () => {
-	it('should return a 400 if request body is not an object', async () => {
+	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify admin object');
+		expect(res.body).toHaveProperty('message', 'Specify { login: { email:string, password: Sha512 String }, name: String, email: String, password: String }');
 	});
 
-	it('should return 400 if login object is not specified', async () => {
+	it('Should return a 400 if the login object is not define', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -46,11 +45,10 @@ describe('POST /NewAdmin', () => {
 				login: {}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify login object');
+		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
 	});
 
-	it('should return 404 if email is not link to Admin', async () => {
+	it('Should return a 404 if the email is not linked to an Admin', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -63,11 +61,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('status', 404);
 		expect(res.body).toHaveProperty('message', 'Admin login not found');
 	});
 
-	it('should return 403 if password of admin is bad', async () => {
+	it('Should return a 403 if the admin password is wrong', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -80,11 +77,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('status', 403);
-		expect(res.body).toHaveProperty('message', 'bad login password');
+		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
-	it('should return a 400 if name is not a string', async () => {
+	it('Should return a 400 if the name is not a string', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -97,11 +93,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'username must be a string');
+		expect(res.body).toHaveProperty('message', 'Name must be a string');
 	});
 
-	it('should return a 400 if email is not a string', async () => {
+	it('Should return a 400 if email is not a string', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -114,11 +109,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'email must be a string');
+		expect(res.body).toHaveProperty('message', 'Email must be a string');
 	});
 
-	it('should return a 400 if email is empty', async () => {
+	it('Should return a 400 if the email is empty', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -131,11 +125,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'email must be a string');
+		expect(res.body).toHaveProperty('message', 'Email must be a string');
 	});
 
-	it('should return a 400 if password is not a SHA512 string', async () => {
+	it('Should return a 400 if the password is not in SHA512 format', async () => {
 		const res = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -148,11 +141,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'the password must be sha512');
+		expect(res.body).toHaveProperty('message', 'Password must be in sha512 format');
 	});
 
-	it('should return a 409 if a admin with the same email already exists', async () => {
+	it('Should return a 409 if an admin with the same email already exists', async () => {
 		const res1 = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -178,11 +170,10 @@ describe('POST /NewAdmin', () => {
 				}
 			});
 		expect(res2.status).toEqual(409);
-		expect(res2.body).toHaveProperty('status', 409);
-		expect(res2.body).toHaveProperty('message', 'Admin with email testCreateAdmin@example.com already exists');
+		expect(res2.body).toHaveProperty('message', 'An admin with this email already exists');
 	});
 
-	it('should create Admin', async () => {
+	it('Should create an admin', async () => {
 		const res1 = await req
 			.post('/api/NewAdmin')
 			.send({
@@ -196,12 +187,6 @@ describe('POST /NewAdmin', () => {
 			});
 		expect(res1.status).toEqual(200);
 		const admin = await Admin.findOne({ email: 'testCreateAdmin@example.com' });
-		let exist: boolean;
-		if (admin) {
-			exist = true
-		} else {
-			exist = false;
-		}
-		expect(exist).toEqual(true);
+		expect(admin ? true : false).toEqual(true);
 	});
 });

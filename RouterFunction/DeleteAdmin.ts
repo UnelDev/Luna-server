@@ -1,11 +1,23 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
-import { Admin } from "../Models/Admin";
+
 import CheckAdmin from "../Functions/CheckAdmin";
 
-export default async function deletAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+import { Admin } from "../Models/Admin";
+
+/*
+**{
+**	login:{
+**		email:string
+**		password:stringSha512
+**	},
+**	email:String
+**}
+*/
+
+export default async function deleteAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 2) {
-		res.status(400).send({ status: 400, message: "specify email and login object" })
+		res.status(400).send({ message: "Specify { login: { email: String, password: Sha512 String }, email: String }" })
 		return;
 	}
 
@@ -14,19 +26,16 @@ export default async function deletAdmin(req: Request<{}, any, any, ParsedQs, Re
 	}
 
 	if (typeof req.body.email != 'string') {
-		res.status(400).send({ status: 400, message: "bad email to delet user" });
+		res.status(400).send({ message: "Email must be a string" });
 		return;
 	}
 
-	if (await Admin.findOne({ email: req.body.email })) {
-		res.status(404).send({ status: 404, message: "user not found" });
+	if (!(await Admin.findOne({ email: req.body.email }))) {
+		res.status(404).send({ message: "Admin not found" });
 		return;
 	}
 
-	const admin = await Admin.deleteOne({ email: req.body.email });
-	if (admin) {
-		res.send('admin ' + req.body.email + ' deleted');
-	} else {
-		res.status(400).send('error in deleting ' + req.body.email + ' user');
-	}
+	await Admin.deleteOne({ email: req.body.email });
+
+	res.status(200).send('Admin deleted successfully');
 }

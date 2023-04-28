@@ -1,6 +1,8 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+
 import CheckAdmin from "../Functions/CheckAdmin";
+
 import { Box } from "../Models/Box";
 
 /*
@@ -15,7 +17,7 @@ import { Box } from "../Models/Box";
 export default async function listBox(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 1) {
-		res.status(400).send({ message: "Specify { email: string, password: sha512string }" })
+		res.status(400).send({ message: "Specify { email: String, password: Sha512 String }" })
 		return;
 	}
 
@@ -24,10 +26,5 @@ export default async function listBox(req: Request<{}, any, any, ParsedQs, Recor
 	}
 
 	const allBox = await Box.find();
-	if (allBox) {
-		res.send(allBox);
-	} else {
-		res.status(400).send({ message: 'error ocurred' });
-	}
-
+	res.status(200).send(allBox);
 }

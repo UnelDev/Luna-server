@@ -33,26 +33,25 @@ afterAll(async () => {
 })
 
 describe('POST /ListBoxs', () => {
-	it('should return a 400 if request body is not an object', async () => {
+	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
 			.post('/api/ListBoxs')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
+		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
 	});
 
-	it('should return 400 if login object is not specified', async () => {
+	it('Should return a 400 if login object is not defined', async () => {
 		const res = await req
 			.post('/api/ListBoxs')
 			.send({
 				login: {}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify login object');
+		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
 	});
 
-	it('should return 404 if email is not link to Admin', async () => {
+	it('Should return a 404 if email is not linkd to an admin', async () => {
 		const res = await req
 			.post('/api/ListBoxs')
 			.send({
@@ -62,11 +61,10 @@ describe('POST /ListBoxs', () => {
 				}
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('status', 404);
 		expect(res.body).toHaveProperty('message', 'Admin login not found');
 	});
 
-	it('should return 403 if password of admin is bad', async () => {
+	it('Should return a 403 if admin password is wrong', async () => {
 		const res = await req
 			.post('/api/ListBoxs')
 			.send({
@@ -76,11 +74,10 @@ describe('POST /ListBoxs', () => {
 				}
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('status', 403);
-		expect(res.body).toHaveProperty('message', 'bad login password');
+		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
-	it('should return 403 if password of admin is bad', async () => {
+	it('Should return a list', async () => {
 		const res = await req
 			.post('/api/ListBoxs')
 			.send({
@@ -91,6 +88,5 @@ describe('POST /ListBoxs', () => {
 			});
 		expect(res.status).toEqual(200);
 		expect(Array.isArray(res.body)).toEqual(true);
-		//typof
 	});
 });

@@ -47,15 +47,15 @@ afterAll(async () => {
 });
 
 describe('POST /Unassign', () => {
-	it('should return a 400 if request body is not an object', async () => {
+	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify object');
+		expect(res.body).toHaveProperty('message', 'Specify { login: { username: String, password: Sha512 String }, name: String|id, numberOfSlot: Number }');
 	});
 
-	it('should return 400 if login object is not specified', async () => {
+	it('Should return a 400 if login object is not define', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send({
@@ -64,10 +64,10 @@ describe('POST /Unassign', () => {
 				login: {}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'specify login object');
+		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
 	});
 
-	it('should return 404 if email is not link to Admin', async () => {
+	it('Should return a 404 if email is not link to an admin', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send({
@@ -82,7 +82,7 @@ describe('POST /Unassign', () => {
 		expect(res.body).toHaveProperty('message', 'Admin login not found');
 	});
 
-	it('should return 403 if password of admin is bad', async () => {
+	it('Should return a 403 if the admin password is wrong', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send({
@@ -94,11 +94,11 @@ describe('POST /Unassign', () => {
 				}
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('message', 'bad login password');
+		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
 
-	it('sould return 400 if numberOfSlot is not a number', async () => {
+	it('Sould return a 400 if numberOfSlot is not a number', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send({
@@ -113,7 +113,7 @@ describe('POST /Unassign', () => {
 		expect(res.body).toHaveProperty('message', 'numberOfSlot must be a number');
 	});
 
-	it('sould return 400 if name is not a string', async () => {
+	it('Sould return 400 if name is not a string', async () => {
 		const res = await req
 			.post('/api/Unassign')
 			.send({
@@ -125,7 +125,7 @@ describe('POST /Unassign', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'the name must be a string');
+		expect(res.body).toHaveProperty('message', 'Name must be a string');
 	});
 
 	it('Unassign a lock', async () => {
@@ -141,7 +141,7 @@ describe('POST /Unassign', () => {
 				}
 			});
 		expect(res.status).toEqual(200);
-		expect(res.body).toHaveProperty('message', 'slot unassigned with sucess');
+		expect(res.body).toHaveProperty('message', 'Slot unassigned successfully');
 		expect((await Box.findOne({ name: 'UnassignBoxTest' })).slot[1]).toEqual(null);
 	});
 });

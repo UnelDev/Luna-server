@@ -38,16 +38,15 @@ afterEach(async () => {
 })
 
 describe('POST /DeleteUser', () => {
-	it('should return a 400 if request body is not an object', async () => {
+	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify email and login object');
+		expect(res.body).toHaveProperty('message', 'Specify { login: { email: String, password: Sha512 String }, email: String }');
 	});
 
-	it('should return 400 if login object is not specified', async () => {
+	it('Should return a 400 if login object is not define', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send({
@@ -55,11 +54,10 @@ describe('POST /DeleteUser', () => {
 				login: {}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'specify login object');
+		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
 	});
 
-	it('should return 404 if email is not link to Admin', async () => {
+	it('Should return a 404 if the login email is not link to an admin', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send({
@@ -70,11 +68,10 @@ describe('POST /DeleteUser', () => {
 				}
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('status', 404);
 		expect(res.body).toHaveProperty('message', 'Admin login not found');
 	});
 
-	it('should return 403 if password of admin is bad', async () => {
+	it('Should return a 403 if admin password is wrong', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send({
@@ -85,11 +82,10 @@ describe('POST /DeleteUser', () => {
 				}
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('status', 403);
-		expect(res.body).toHaveProperty('message', 'bad login password');
+		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
-	it('should return a 400 if email is not a string', async () => {
+	it('Should return a 400 if email is not a string', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send({
@@ -101,11 +97,10 @@ describe('POST /DeleteUser', () => {
 			});
 
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('status', 400);
-		expect(res.body).toHaveProperty('message', 'bad email to delet user');
+		expect(res.body).toHaveProperty('message', 'Email must be a string');
 	});
 
-	it('should delet user', async () => {
+	it('Should delete the user', async () => {
 		const res = await req
 			.post('/api/DeleteUser')
 			.send({
@@ -117,12 +112,6 @@ describe('POST /DeleteUser', () => {
 			});
 		expect(res.status).toEqual(200);
 		const user = await User.findOne({ email: 'testDeleteUser@example.com' });
-		let exist: boolean;
-		if (user) {
-			exist = true
-		} else {
-			exist = false;
-		}
-		expect(exist).toEqual(false);
+		expect(user ? true : false).toEqual(false);
 	});
 });
