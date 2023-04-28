@@ -1,26 +1,31 @@
-import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
+import mongoose from 'mongoose';
 import path from 'path';
+
 import router from './routes';
+
 dotenv.config({ path: '.env' });
+
 let started = false;
 
-export default function startServer() {
+dotenv.config({ path: '.env' });
+
+
+function main() {
 	if (started) {
-		console.log('server already started');
+		console.log('Server already started');
 		return;
 	}
 	started = true;
-	// Connect to MongoDB using Mongoose
 
-	mongoose.connect(process.env.URI)
-		.then(() => {
-			console.log('Successfully connected to MongoDB');
-		}).catch((error) => {
-			console.log('Error connecting to MongoDB:', error);
-		});
+	// Connect to MongoDB using Mongoose
+	mongoose.connect(process.env.URI).then(() => {
+		console.log('Successfully connected to MongoDB');
+	}).catch((error) => {
+		console.log('Error connecting to MongoDB:', error);
+	});
 
 	// Create an instance of the Express app
 	const app = express();
@@ -39,4 +44,6 @@ export default function startServer() {
 	});
 }
 
-startServer();
+main();
+
+export default main;

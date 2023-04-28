@@ -46,6 +46,22 @@ best response : ‘new password is effective’
 
 other response: see [this](./RouterFuction/changePassword.ts)
 
+### url/api/changeAdminPassword
+
+type:
+
+```json
+{
+	email: string,
+	oldPassword: sha512 string,
+	newPassword: sha512 string
+}
+```
+
+best response : ‘Operation success’
+
+other response: see [this](./RouterFuction/changeAdminPassword.ts)
+
 ### url/api/newAdmin
 
 type:
