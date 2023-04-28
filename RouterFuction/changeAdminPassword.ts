@@ -40,5 +40,5 @@ export default async function changeAdminPassword(req: Request<{}, any, any, Par
 		{ new: true }
 	);
 
-	res.status(200).send({ message: 'Operation success' });
+	res.send({ message: 'Operation success' });
 }
