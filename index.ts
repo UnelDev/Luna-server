@@ -10,8 +10,6 @@ dotenv.config({ path: '.env' });
 
 let started = false;
 
-dotenv.config({ path: '.env' });
-
 
 function main() {
 	if (started) {
@@ -36,7 +34,7 @@ function main() {
 	// Start the Express app
 	const port = 8082;
 	app.listen(port, () => {
-		console.log(`listening at http://localhost:${port}`);
+		console.log(`Listening at http://localhost:${port}`);
 	});
 
 	app.get('/', (req, res) => {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 
-import { Admin } from "../models/admin";
+import { Admin } from "../Models/Admin";
 
 export default async function changeAdminPassword(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
@@ -40,5 +40,5 @@ export default async function changeAdminPassword(req: Request<{}, any, any, Par
 		{ new: true }
 	);
 
-	res.status(200).send({ message: 'Operation success' });
+	res.send({ message: 'Operation success' });
 }

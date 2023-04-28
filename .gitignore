@@ -6,3 +6,4 @@ test/-createUser.http
 .env
 test/-createUser copy.http
 .todo
+*.log

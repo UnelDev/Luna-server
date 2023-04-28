@@ -1,183 +1,183 @@
 # Luna server
 
-## data base
+## Database
 
-the Luna data base Is a [mongodb](https://www.mongodb.com) data base, she works with a nosql architecture. the interface between mongodb and node js server is [mongoose](https://mongoosejs.com), mongoose is a hight level interface.
+The Luna database is a [Mongo](https://www.mongodb.com) database. The interface between MongoDB and NodeJS server is [Mongoose](https://mongoosejs.com), a high level interface.
 
-## server
+## Server
 
-the server is the core of the Luna project, it uses mongodb through mongoose to provide its data. the server receives requests through its rest api, after that it processes the requests by checking the conformity of the data. once compliance is confirmed, he can search and send the processed data.
+The server is the core of the Luna project, it uses MongoDB via Mongoose to provide its data. The server receives the requests via its REST API, after which it processes the requests by checking the compliance of the data. Once confirmed, it can search and send the processed data.
 
-## REST api
+## REST API
 
-the API remains functional with express.
+The API works through ExpressJS.
 
-here is a list of possible requests:
+Here is a list of possible queries:
 
-### url/api/newUsers
+### /api/newUsers
 
-type:
+Type:
 
 ```json
 {
-	name: string,
-	email: string,
-	password: Sha512 string
+	name: String,
+	email: String,
+	password: Sha512 String
 }
 ```
 
-best response:  'User ' + email + ' created'
+Expected response:  'User ' + email + ' created'
 
-other response: see [this](./RouterFuction/createUser.ts)
+See [this](./RouterFuction/createUser.ts) for errors and other cases.
 
-### url/api/changePassword
+### /api/changePassword
 
-type:
+Type:
 
 ```json
 {
-	email: string,
-	newPassword: Sha512 string,
-	oldPassword: Sha512 string
+	email: String,
+	newPassword: Sha512 String,
+	oldPassword: Sha512 String
 }
 ```
 
-best response : ‘new password is effective’
+Expected response : ‘New password is effective’
 
-other response: see [this](./RouterFuction/changePassword.ts)
+See [this](./RouterFuction/changePassword.ts) for errors and other cases.
 
-### url/api/changeAdminPassword
+### /api/changeAdminPassword
 
-type:
+Type:
 
 ```json
 {
-	email: string,
-	oldPassword: sha512 string,
-	newPassword: sha512 string
+	email: String,
+	oldPassword: Sha512 String,
+	newPassword: Sha512 String
 }
 ```
 
-best response : ‘Operation success’
+Expected response : ‘Operation success’
 
-other response: see [this](./RouterFuction/changeAdminPassword.ts)
+See [this](./RouterFuction/changeAdminPassword.ts) for errors and other cases.
 
-### url/api/newAdmin
+### /api/newAdmin
 
-type:
+Type:
 
 ```json
 {
-	name: string,
-	email: string,
-	password: Sha512 string,
+	name: String,
+	email: String,
+	password: Sha512 String,
 	login: {
-		email: string,
-		password: Sha512 string
+		email: String,
+		password: Sha512 String
 }
 ```
 
-best response: 'Admin ' + email + ' created'
+Expected response : 'Admin ' + email + ' created'
 
-other response : see [this](./RouterFuction/createAdmin.ts)
+See [this](./RouterFuction/createAdmin.ts) for errors and other cases.
 
-### url/api/deletAdmin
+### /api/deletAdmin
 
-type:
+Type:
 
 ```json
 {
-	email: string,
+	email: String,
 	login: {
-		email: string,
-		password: sha512 string
+		email: String,
+		password: Sha512 String
 	}
 }
 ```
 
-best response: 'admin ' + email + ' deleted'
+Expected response : 'admin ' + email + ' deleted'
 
-other response: see [this](./RouterFuction/deletAdmin.ts)
+See [this](./RouterFuction/deletAdmin.ts) for errors and other cases.
 
-### url/api/deletUser
+### /api/deletUser
 
-type:
+Type:
 
 ```json
 {	
-	email: string,
+	email: String,
 	login: {
-		email: string,
-		password: Sha512 string
+		email: String,
+		password: Sha512 String
 	}
 }
 ```
 
-best response: 'user ' + email + ' deleted'
+Expected response : 'user ' + email + ' deleted'
 
-other response: see [this](./RouterFuction/deletUser.ts)
+See [this](./RouterFuction/deletUser.ts) for errors and other cases.
 
-### url/api/newBox
+### /api/newBox
 
-type:
+Type:
 
 ```json
 {
-	name: string,
-	placment: string,
+	name: String,
+	placment: String,
 	size: 3,
-	slot: [null, null, null] | [[idUser string, date], [idUser string, date], [idUser string, date]],
+	slot: [null, null, null] | [[idUser String, date], [idUser String, date], [idUser String, date]],
 	login: {
-		email: string,
-		password: sha512 string
+		email: String,
+		password: Sha512 String
 	}
 }
 ```
 
-best response: 'the ' + name + ' boxe has been creted'
+Expected response : 'Box ' + name + ' created'
 
-other response : see [this](./RouterFuction/createBox.ts)
+See [this](./RouterFuction/createBox.ts) for errors and other cases.
 
-### url/api/assign
+### /api/assign
 
-type:
-
-```json
-{
-	id: IdBox string,
-	IDOfUser: idUser string,
-	numberOfSlot: number,
-	login: {
-		email: string,
-		password: sha512 string
-}
-```
-
-best response: slot attributed with sucess
-
-other response see [this](./RouterFuction/assign.ts)
-
-### url/api/unassign
-
-type:
+Type:
 
 ```json
 {
-	id: IdBox string,
+	id: IdBox String,
+	IDOfUser: idUser String,
 	numberOfSlot: number,
 	login: {
-		email: string,
-		password: sha512 string
+		email: String,
+		password: Sha512 String
 }
 ```
 
-best response: slot unassigned with sucess
+Expected response : Slot attributed with success
 
-other response see [this](./RouterFuction/unassign.ts)
+See [this](./RouterFuction/assign.ts) for errors and other cases.
 
-### url/api/login
+### /api/unassign
 
-type:
+Type:
+
+```json
+{
+	id: IdBox String,
+	numberOfSlot: Number,
+	login: {
+		email: String,
+		password: Sha512 String
+}
+```
+
+Expected response: Slot unassigned with sucess
+
+See [this](./RouterFuction/unassign.ts) for errors and other cases.
+
+### /api/login
+
+Type:
 
 ```json
 {
