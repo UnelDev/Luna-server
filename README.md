@@ -221,3 +221,38 @@ type:
 best response {data: string}
 
 other response see [this](./RouterFunction/GetLogs.ts)
+
+### url/api/ListBoxs
+
+type:
+
+```json
+{
+	login: {
+		email: String,
+		password: Sha512 String
+	}
+}
+```
+
+best response [box, box]
+
+other response see [this](./RouterFunction/ListBoxs.ts)
+
+### url/api/ListUser
+
+type:
+
+```json
+{
+	login: {
+		email: String,
+		password: Sha512 String
+	}
+}
+```
+
+best response [user, user]
+
+other response see [this](./RouterFunction/ListUser.ts)
+

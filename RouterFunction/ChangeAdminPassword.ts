@@ -48,6 +48,6 @@ export default async function changeAdminPassword(req: Request<{}, any, any, Par
 		{ new: true }
 	);
 
-	Log('changeAdminPassword.ts', 'INFORMATION', 'Admin "' + req.body.email + '" changed his password');
+	Log('changeAdminPassword.ts', 'INFORMATION', 'Admin "' + req.body.login.email + '" changed his password');
 	res.send({ message: 'Operation success' });
 }

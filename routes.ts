@@ -13,6 +13,7 @@ import ListBoxs from './RouterFunction/ListBoxs';
 import Login from './RouterFunction/Login';
 import LoginAdmin from './RouterFunction/LoginAdmin';
 import Unassign from './RouterFunction/Unassign';
+import listUser from './RouterFunction/ListUser';
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.post('/Unassign', Unassign);
 router.post('/DeleteUser', DeleteUser);
 router.post('/DeleteAdmin', DeleteAdmin);
 router.post('/ListBoxs', ListBoxs);
+router.post('/ListUser', listUser);
 router.put('/ChangePassword', ChangePassword);
 router.put('/ChangeAdminPassword', ChangeAdminPassword);
 router.post('/GetLogs', GetLogs);

@@ -30,6 +30,6 @@ export default async function listBox(req: Request<{}, any, any, ParsedQs, Recor
 
 	const allBox = await Box.find();
 
-	Log('listBox.ts', 'INFORMATION', 'Admin "' + req.body.email + '" got the box list');
+	Log('listBox.ts', 'INFORMATION', 'Admin "' + req.body.login.email + '" got the box list');
 	res.status(200).send(allBox);
 }
