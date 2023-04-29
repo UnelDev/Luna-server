@@ -14,7 +14,7 @@ The API works through ExpressJS.
 
 Here is a list of possible queries:
 
-### /api/newUsers
+### /api/CreateUser
 
 Type:
 
@@ -30,7 +30,7 @@ Expected response:  'User ' + email + ' created'
 
 See [this](./RouterFuction/createUser.ts) for errors and other cases.
 
-### /api/changePassword
+### /api/ChangePassword
 
 Type:
 
@@ -46,7 +46,7 @@ Expected response : ‘New password is effective’
 
 See [this](./RouterFuction/changePassword.ts) for errors and other cases.
 
-### /api/changeAdminPassword
+### /api/ChangeAdminPassword
 
 Type:
 
@@ -62,7 +62,7 @@ Expected response : ‘Operation success’
 
 See [this](./RouterFuction/changeAdminPassword.ts) for errors and other cases.
 
-### /api/newAdmin
+### /api/CreateAdmin
 
 Type:
 
@@ -81,7 +81,7 @@ Expected response : 'Admin ' + email + ' created'
 
 See [this](./RouterFuction/createAdmin.ts) for errors and other cases.
 
-### /api/deletAdmin
+### /api/DeleteAdmin
 
 Type:
 
@@ -99,7 +99,7 @@ Expected response : 'admin ' + email + ' deleted'
 
 See [this](./RouterFuction/deletAdmin.ts) for errors and other cases.
 
-### /api/deletUser
+### /api/DeleteUser
 
 Type:
 
@@ -117,7 +117,7 @@ Expected response : 'user ' + email + ' deleted'
 
 See [this](./RouterFuction/deletUser.ts) for errors and other cases.
 
-### /api/newBox
+### /api/CreateBox
 
 Type:
 
@@ -138,7 +138,7 @@ Expected response : 'Box ' + name + ' created'
 
 See [this](./RouterFuction/createBox.ts) for errors and other cases.
 
-### /api/assign
+### /api/Assign
 
 Type:
 
@@ -157,7 +157,7 @@ Expected response : Slot attributed with success
 
 See [this](./RouterFuction/assign.ts) for errors and other cases.
 
-### /api/unassign
+### /api/Unassign
 
 Type:
 
@@ -175,7 +175,7 @@ Expected response: Slot unassigned with sucess
 
 See [this](./RouterFuction/unassign.ts) for errors and other cases.
 
-### /api/login
+### /api/Login
 
 Type:
 
@@ -190,7 +190,7 @@ best response Logged in !
 
 other response see [this](./RouterFuction/Login.ts)
 
-### url/api/loginAdmin
+### url/api/LoginAdmin
 
 type:
 
