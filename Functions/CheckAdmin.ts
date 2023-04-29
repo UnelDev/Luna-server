@@ -1,6 +1,5 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
-
 import { Admin } from "../Models/Admin";
 
 export default async function CheckAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {

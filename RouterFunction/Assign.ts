@@ -1,16 +1,15 @@
 import { Request, Response } from "express-serve-static-core";
-import { Document, Types } from "mongoose";
 import { ParsedQs } from "qs";
-
+import { Document, Types } from "mongoose";
 import CheckAdmin from "../Functions/CheckAdmin";
-
-import { Box } from "../Models/Box";
+import { log } from "../Functions/Logs";
 import { User } from "../Models/User";
+import { Box } from "../Models/Box";;
 
 /*
 **{
 **	login:{
-**		email:string
+**		username:string
 **		password:stringSha512
 **	},
 **	name:string|id:string,
@@ -21,37 +20,43 @@ import { User } from "../Models/User";
 
 export default async function assign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 4) {
-		res.status(400).send({ message: "Specify { login: { email: String, password: Sha512 String }, name: String, IDOfUser: String, numberOfSlot: Number }" });
+		log('assing.ts', 'WARNING', 'assing has been call with wrong body');
+		res.status(400).send({ status: 400, message: "specify object" });
 		return;
 	}
 
 	if (!await CheckAdmin(req, res)) {
+		log('assing.ts', 'WARNING', 'assing has been call without valid admin id');
 		return;
 	}
 
 	if (typeof req.body.numberOfSlot != 'number') {
+		log('assing.ts', 'WARNING', 'assing has been call with wrong type of numberOfSlot');
 		res.status(400).send({ message: 'numberOfSlot must be a number' });
 		return;
 	}
 
 	if (typeof req.body.IDOfUser != 'string') {
+		log('assing.ts', 'WARNING', 'assing has been call with wrong type of IDOfUser');
 		res.status(400).send({ message: 'IDOfUser must be a string' });
 		return;
 	}
-
 	if (req.body.name) {
 		if (req.body.id) {
-			res.status(400).send({ message: 'Use id OR name. Only one is allowed. Prefer to use id' });
+			log('assing.ts', 'WARNING', 'assing has been call but name is specified same time of id');
+			res.status(400).send({ message: 'the id is specified but name is already specified, you have to specify only id or name. Prefer the id' });
 			return;
 		}
 		if (typeof req.body.name != 'string') {
-			res.status(400).send({ message: 'Name must be a string' });
+			log('assing.ts', 'WARNING', 'assing has been call with wrong type of name');
+			res.status(400).send({ message: 'the name must be a string' });
 			return;
 		}
 
 		const user = await User.findOne({ email: req.body.IDOfUser });
 		if (!user) {
-			res.status(404).send({ message: 'User not found' });
+			log('assing.ts', 'WARNING', 'assing has been call but the specifed user does not exist');
+			res.status(404).send({ message: 'user not found' });
 			return;
 		}
 
@@ -60,22 +65,28 @@ export default async function assign(req: Request<{}, any, any, ParsedQs, Record
 
 	} else if (req.body.id) {
 		if (req.body.name) {
-			res.status(400).send({ message: 'Use id OR name. Only one is allowed. Prefer to use id' });
+			log('assing.ts', 'WARNING', 'assing has been call but name is specified same time of id');
+			res.status(400).send({ message: 'the name is specified but id is already specified, you have to specify only id or name. Prefer the id' });
 			return;
 		}
 		if (typeof req.body.id != 'string') {
-			res.status(400).send({ message: 'Id must be a string' });
+			log('assing.ts', 'WARNING', 'assing has been call with wrong type of id');
+			res.status(400).send({ message: 'the id must be a string' });
 			return;
 		}
 		const user = await User.findById(req.body.IDOfUser);
 		if (!user) {
-			res.status(404).send({ message: 'User not found' });
+			log('assing.ts', 'WARNING', 'assing has been call but the specifed user does not exist');
+			res.status(404).send({ message: 'user not found' });
 			return;
 		}
 		const response = await find(req.body.id, req.body.numberOfSlot, req.body.IDOfUser);
 		res.status(response.code).send({ message: response.message });
+
 	} else {
-		res.status(400).send({ message: 'Specify name or id of the box' });
+		log('assing.ts', 'WARNING', 'assing has been call name or id has not specified');
+		res.status(400).send({ message: 'please specified name or id of the box' });
+		return;
 	}
 
 }
@@ -87,21 +98,25 @@ async function find(key: { name: string } | String, slotNumber: number, id: stri
 	} else if (typeof key == 'object') {
 		box = await Box.findOne(key);
 	}
-
 	if (!box) {
-		return { code: 404, message: 'Box not found' };
+		log('assing.ts', 'WARNING', 'assing has been call but the requiered box does not exist');
+		return { code: 404, message: 'box not found' };
 	}
 
 	if (slotNumber > box.slot.length) {
-		return { code: 400, message: 'Slot number is higher than the number of slots' }
+		log('assing.ts', 'WARNING', 'assing has been call but slot number is higher of box slot size');
+		return { code: 400, message: 'slot number should not be higher of box slot size' }
 	}
 
 	if (box.slot[slotNumber]) {
-		return { code: 400, message: 'The slot is already used' };
+		log('assing.ts', 'WARNING', 'assing has been call but the slot is already use');
+		return { code: 400, message: 'the slot is already use' };
 	}
 
 	box.slot[slotNumber] = [id, new Date()];
 	await box.save();
 
-	return { code: 200, message: 'Slot assigned successfully' };
+	log('assing.ts', 'INFORMATION', `in box ${box.id} the ${slotNumber} has been assigned to ${id} user`);
+	return { code: 200, message: 'slot assigned with sucess' };
 }
+

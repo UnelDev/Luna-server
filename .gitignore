@@ -7,3 +7,5 @@ test/-createUser.http
 test/-createUser copy.http
 .todo
 *.log
+Tests/CreateUser copy.http
+Tests/CreateUser.http

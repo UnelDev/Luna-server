@@ -3,18 +3,22 @@ import path from 'path'
 import dotenv from 'dotenv';
 import { red, blue, yellow, bgRed, gray } from 'chalk'
 dotenv.config({ path: '.env' });
-//formation:
-//2023-04-28T11:27:47.509Z ERROR bad password for test@exemple.com 
-//2023-04-28T11:27:47.509Z INFORMATION test@exemple.com connected
-
+/**
+ * Impact Levels:
+ * - INFORMATION: No impact on the system or user.
+ * - WARNING: Minor impact that can be easily corrected.
+ * - ERROR: Moderate impact that requires attention.
+ * - CRITICAL: Significant impact that can cause damage or data loss.
+ */
 
 export async function log(file: string, impact: 'INFORMATION' | 'WARNING' | 'ERROR' | 'CRITICAL' | 'DEBUG', text: string, complement?: string) {
-	const date = new Date().toISOString();
+	if (process.env.npm_command == 'test') {
+		return;
+	}
 
 	const logDir = './log';
-	const logFilePath = path.resolve(`${logDir}/log.log`);
+	const logFilePath = path.resolve(`${logDir}/${process.env.ENVIRONMENT == 'dev' ? 'devLog' : 'log'}.log`);
 
-	// Vérifier si le dossier log existe
 	if (!fs.existsSync(logDir)) {
 		fs.mkdirSync(logDir);
 	}
@@ -38,11 +42,12 @@ export async function log(file: string, impact: 'INFORMATION' | 'WARNING' | 'ERR
 			break;
 	}
 
+	const date = new Date().toISOString();
 	// append log in file
-	fs.appendFileSync(logFilePath, `${date} ${file} ${impact} ${text}\n`);
+	fs.appendFileSync(logFilePath, `${new Date().toISOString()} ${impact} ${file} ${text}\n`);
 
 	// print log if you are in dev environment
-	if (process.env.isdev) {
+	if (process.env.ENVIRONMENT == 'dev') {
 
 		console.log(`${date} ${file} ${coloredImpact} ${text}\n`);
 	}
