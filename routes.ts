@@ -11,6 +11,7 @@ import deletAdmin from './RouterFunction/DeleteAdmin';
 import listBox from './RouterFunction/ListBoxs';
 import changePassword from './RouterFunction/ChangePassword';
 import changeAdminPassword from './RouterFunction/ChangeAdminPassword';
+import GetLogs from './RouterFunction/GetLogs';
 
 
 const router = Router();
@@ -25,6 +26,7 @@ router.post('/unassign', unassign);
 router.post('/deletUser', deletUser);
 router.post('/deletAdmin', deletAdmin);
 router.post('/listBox', listBox);
+router.post('/getLogs', GetLogs);
 
 router.put('/changePassword', changePassword);
 router.put('/changeAdminPassword', changeAdminPassword);

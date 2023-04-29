@@ -2,14 +2,14 @@ import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { log } from "../Functions/Logs";
 import CheckAdmin from "../Functions/CheckAdmin";
-import { Box } from "../Models/Box";;
+import { Box } from "../Models/Box";
 
-/*
+/**
 **{
-**	login:{
-**		username:string
-**		password:stringSha512
-**	}
+*	login:{
+*		username:string
+*		password:stringSha512
+*	}
 **}
 */
 
@@ -28,10 +28,10 @@ export default async function listBox(req: Request<{}, any, any, ParsedQs, Recor
 
 	const allBox = await Box.find();
 	if (allBox) {
-		log('listBox.ts', 'WARNING', 'the list of box has been send to ' + req.body.email + ' admin');
+		log('listBox.ts', 'WARNING', 'the list of box has been send to ' + req.body.login.email + ' admin');
 		res.send(allBox);
 	} else {
-		log('listBox.ts', 'ERROR', 'one error is ocured in listbox by ' + req.body.email + ' admin');
+		log('listBox.ts', 'ERROR', 'one error is ocured in listbox by ' + req.body.login.email + ' admin');
 		res.status(400).send({ message: 'error ocurred' });
 	}
 

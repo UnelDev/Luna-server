@@ -9,3 +9,5 @@ test/-createUser copy.http
 *.log
 Tests/CreateUser copy.http
 Tests/CreateUser.http
+Tests/-createUser copy.http
+*.http

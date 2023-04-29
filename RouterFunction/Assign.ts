@@ -8,14 +8,14 @@ import { Box } from "../Models/Box";;
 
 /*
 **{
-**	login:{
-**		username:string
-**		password:stringSha512
-**	},
-**	name:string|id:string,
-**	IDOfUser:String,
-**	numberOfSlot:number
-**}
+	login:{
+		username:string
+		password:stringSha512
+	},
+	name:string|id:string,
+	IDOfUser:String,
+	numberOfSlot:number
+}
 */
 
 export default async function assign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
