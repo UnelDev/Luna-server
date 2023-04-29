@@ -28,7 +28,7 @@ Type:
 
 Expected response:  'User ' + email + ' created'
 
-See [this](./RouterFuction/createUser.ts) for errors and other cases.
+See [this](./RouterFunction/createUser.ts) for errors and other cases.
 
 ### /api/ChangePassword
 
@@ -44,7 +44,7 @@ Type:
 
 Expected response : ‘New password is effective’
 
-See [this](./RouterFuction/changePassword.ts) for errors and other cases.
+See [this](./RouterFunction/changePassword.ts) for errors and other cases.
 
 ### /api/ChangeAdminPassword
 
@@ -60,7 +60,7 @@ Type:
 
 Expected response : ‘Operation success’
 
-See [this](./RouterFuction/changeAdminPassword.ts) for errors and other cases.
+See [this](./RouterFunction/changeAdminPassword.ts) for errors and other cases.
 
 ### /api/CreateAdmin
 
@@ -79,7 +79,7 @@ Type:
 
 Expected response : 'Admin ' + email + ' created'
 
-See [this](./RouterFuction/createAdmin.ts) for errors and other cases.
+See [this](./RouterFunction/createAdmin.ts) for errors and other cases.
 
 ### /api/DeleteAdmin
 
@@ -97,7 +97,7 @@ Type:
 
 Expected response : 'admin ' + email + ' deleted'
 
-See [this](./RouterFuction/deletAdmin.ts) for errors and other cases.
+See [this](./RouterFunction/deletAdmin.ts) for errors and other cases.
 
 ### /api/DeleteUser
 
@@ -115,7 +115,7 @@ Type:
 
 Expected response : 'user ' + email + ' deleted'
 
-See [this](./RouterFuction/deletUser.ts) for errors and other cases.
+See [this](./RouterFunction/deletUser.ts) for errors and other cases.
 
 ### /api/CreateBox
 
@@ -136,7 +136,7 @@ Type:
 
 Expected response : 'Box ' + name + ' created'
 
-See [this](./RouterFuction/createBox.ts) for errors and other cases.
+See [this](./RouterFunction/createBox.ts) for errors and other cases.
 
 ### /api/Assign
 
@@ -155,7 +155,7 @@ Type:
 
 Expected response : Slot attributed with success
 
-See [this](./RouterFuction/assign.ts) for errors and other cases.
+See [this](./RouterFunction/assign.ts) for errors and other cases.
 
 ### /api/Unassign
 
@@ -173,7 +173,7 @@ Type:
 
 Expected response: Slot unassigned with sucess
 
-See [this](./RouterFuction/unassign.ts) for errors and other cases.
+See [this](./RouterFunction/unassign.ts) for errors and other cases.
 
 ### /api/Login
 
@@ -188,7 +188,7 @@ Type:
 
 best response Logged in !
 
-other response see [this](./RouterFuction/Login.ts)
+other response see [this](./RouterFunction/Login.ts)
 
 ### url/api/LoginAdmin
 
@@ -203,4 +203,21 @@ type:
 
 best response Logged in !
 
-other response see [this](./RouterFuction/LoginAdmin.ts)
+other response see [this](./RouterFunction/LoginAdmin.ts)
+
+### url/api/GetLogs
+
+type:
+
+```json
+{
+	login: {
+		email: String,
+		password: Sha512 String
+	}
+}
+```
+
+best response {data: string}
+
+other response see [this](./RouterFunction/GetLogs.ts)
