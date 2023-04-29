@@ -1,6 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
-import { Admin } from "../models/admin";
+
+import { Admin } from "../Models/Admin";
 
 export default async function CheckAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body.login != 'object' || Object.keys(req.body.login).length != 2) {
