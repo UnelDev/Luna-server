@@ -10,7 +10,7 @@ export default async function Login(req: Request<{}, any, any, ParsedQs, Record<
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 2) {
 		Log('login.ts', 'WARNING', 'Invalid body');
-		res.status(400).send({ message: "Specify { email: string, password: sha512string }" })
+		res.status(400).send({ message: "Specify { email: String, password: Sha512 String }" })
 		return;
 	}
 

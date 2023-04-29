@@ -10,7 +10,7 @@ export default async function loginAdmin(req: Request<{}, any, any, ParsedQs, Re
 	const regexSHA512 = /^[a-fA-F0-9]{128}$/;
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 2) {
 		Log('loginAdmin.ts', 'WARNING', 'Invalid body');
-		res.status(400).send({ message: "Specify { email: string, password: sha512string }" })
+		res.status(400).send({ message: "Specify { email: String, password: Sha512 String }" })
 		return;
 	}
 

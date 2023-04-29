@@ -32,7 +32,7 @@ describe('POST /LoginAdmin', () => {
 			.post('/api/LoginAdmin')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
+		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
 	});
 
 	it('Should return a 400 if email is not define', async () => {
@@ -42,7 +42,7 @@ describe('POST /LoginAdmin', () => {
 				password: 'bad password'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
+		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
 	});
 
 	it('Should return a 400 if password is not define', async () => {
@@ -52,7 +52,7 @@ describe('POST /LoginAdmin', () => {
 				email: 'LoginAdminPassword@example.com',
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { email: string, password: sha512string }');
+		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
 	});
 
 	it('Should return a 400 if email is not a string', async () => {
