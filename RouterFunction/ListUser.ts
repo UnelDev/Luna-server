@@ -1,7 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import CheckAdmin from "../Functions/CheckAdmin";
-import { Box } from "../Models/Box";
+import { User } from "../Models/User";
 
 /**
 **{
@@ -23,11 +23,10 @@ export default async function listUser(req: Request<{}, any, any, ParsedQs, Reco
 		return;
 	}
 
-	const alluser = await Box.find();
+	const alluser = await User.find();
 	if (alluser) {
 		res.send(alluser);
 	} else {
 		res.status(400).send({ message: 'error ocurred' });
 	}
-
 }
