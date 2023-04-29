@@ -1,10 +1,9 @@
 import { Request, Response } from "express-serve-static-core";
-import { Document, Types } from "mongoose";
 import { ParsedQs } from "qs";
-
+import { Box } from "../models/Box";
+import { Document, Types } from "mongoose";
 import CheckAdmin from "../Functions/CheckAdmin";
-
-import { Box } from "../Models/Box";
+import { log } from "../Functions/Logs";
 
 /*
 **{
@@ -17,28 +16,33 @@ import { Box } from "../Models/Box";
 **}
 */
 
-export default async function Unassign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function unassign(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 3) {
-		res.status(400).send({ status: 400, message: "Specify { login: { username: String, password: Sha512 String }, name: String|id, numberOfSlot: Number }" });
+		log('unassing.ts', 'WARNING', 'unassing has been call with wrong body');
+		res.status(400).send({ status: 400, message: "specify object" });
 		return;
 	}
 
 	if (!await CheckAdmin(req, res)) {
+		log('unassing.ts', 'WARNING', 'unassign has been call without valid admin id');
 		return;
 	}
 
 	if (typeof req.body.numberOfSlot != 'number') {
+		log('unassing.ts', 'WARNING', 'unassign has been call but numberOfSlot is not a number');
 		res.status(400).send({ message: 'numberOfSlot must be a number' });
 		return;
 	}
 
 	if (req.body.name) {
 		if (req.body.id) {
-			res.status(400).send({ message: 'Use id OR name. Only one is allowed. Prefer to use id' });
+			log('unassing.ts', 'WARNING', 'assing has been call but name is specified same time of id');
+			res.status(400).send({ message: 'the id is specified but name is already specified, you have to specify only id or name. Prefer the id' });
 			return;
 		}
 		if (typeof req.body.name != 'string') {
-			res.status(400).send({ message: 'Name must be a string' });
+			log('unassing.ts', 'WARNING', 'unassign has been call but name is not a string');
+			res.status(400).send({ message: 'the name must be a string' });
 			return;
 		}
 
@@ -47,18 +51,21 @@ export default async function Unassign(req: Request<{}, any, any, ParsedQs, Reco
 
 	} else if (req.body.id) {
 		if (req.body.name) {
-			res.status(400).send({ message: 'Use id OR name. Only one is allowed. Prefer to use id' });
+			log('unassing.ts', 'WARNING', 'assing has been call but id is specified same time of name');
+			res.status(400).send({ message: 'the name is specified but id is already specified, you have to specify only id or name. Prefer the id' });
 			return;
 		}
 		if (typeof req.body.id != 'string') {
-			res.status(400).send({ message: 'Id must be a string' });
+			log('unassing.ts', 'WARNING', 'unassign has been call but id is not a string');
+			res.status(400).send({ message: 'the id must be a string' });
 			return;
 		}
 		const response = await find(req.body.id, req.body.numberOfSlot);
 		res.status(response.code).send({ message: response.message });
 
 	} else {
-		res.status(400).send({ message: 'Specify name or id of the box' });
+		log('unassing.ts', 'WARNING', 'unassign has been call without id or name');
+		res.status(400).send({ message: 'please specified name or id of the box' });
 		return;
 	}
 
@@ -71,17 +78,19 @@ async function find(key: { name: string } | String, slotNumber: number) {
 	} else if (typeof key == 'object') {
 		box = await Box.findOne(key);
 	}
-
 	if (!box) {
-		return { code: 404, message: 'Box not found' };
+		log('unassing.ts', 'WARNING', 'unassing has been call but the requiered box does not exist');
+		return { code: 404, message: 'box not found' };
 	}
 
 	if (slotNumber > box.slot.length) {
-		return { code: 400, message: 'Slot number is higher than the number of slots' }
+		log('unassing.ts', 'WARNING', 'unassing has been call but slot number is higher of box slot size');
+		return { code: 400, message: 'slot number should not be higher of box slot size' }
 	}
 
 	box.slot[slotNumber] = null;
 	await box.save();
 
-	return { code: 200, message: 'Slot unassigned successfully' };
+	log('unassing.ts', 'INFORMATION', `in box ${box.id} the ${slotNumber} has been unassigned to actual user`);
+	return { code: 200, message: 'slot unassigned with sucess' };
 }

@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import request from 'supertest';
-
-import { User } from '../Models/User';
-
+import { User } from '../models/user';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const req = request('http://localhost:8082');
@@ -16,66 +14,58 @@ afterEach(async () => {
 	await User.deleteOne({ email: 'testCreateUser@example.com' });
 });
 
-describe('POST /NewUser', () => {
-	it('Should return a 400 if request body is not an object', async () => {
+describe('POST /newUsers', () => {
+	it('should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { name: String, email: String, password: Sha512 String }');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'specify user object');
 	});
 
-	it('Should return a 400 if name is not a string', async () => {
+	it('should return a 400 if name is not a string', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 123,
 				email: 'testCreateUser@example.com',
 				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Name must be a string');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'username must be a string');
 	});
 
-	it('Should return a 400 if email is not a string', async () => {
+	it('should return a 400 if email is not a string', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 123,
 				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Email must be a string');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'email must be a string');
 	});
 
-	it('Should return a 400 if email is empty', async () => {
+	it('should return a 400 if password is not a SHA512 string', async () => {
 		const res = await req
-			.post('/api/NewUser')
-			.send({
-				name: 'Test Create User',
-				email: '',
-				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
-			});
-		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Email must be a string');
-	});
-
-	it('Should return a 400 if password is not in SHA512 format', async () => {
-		const res = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
 				password: 'badPassword'
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Password must be in Sha512 format');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the password must be sha512');
 	});
 
-	it('Should return a 409 if a user with the same email already exists', async () => {
+	it('should return a 409 if a user with the same email already exists', async () => {
 		const res1 = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -84,28 +74,34 @@ describe('POST /NewUser', () => {
 		expect(res1.status).toEqual(200);
 
 		const res2 = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
 				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res2.status).toEqual(409);
-		expect(res2.body).toHaveProperty('message', 'A user with this email already exists');
+		expect(res2.body).toHaveProperty('status', 409);
+		expect(res2.body).toHaveProperty('message', 'User with email testCreateUser@example.com already exists');
 	});
 
-	it('Should create a user', async () => {
+	it('should create user', async () => {
 		const res1 = await req
-			.post('/api/NewUser')
+			.post('/api/newUsers')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
 				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 			});
 		expect(res1.status).toEqual(200);
-		expect(res1.body).toHaveProperty('message', 'User created successfully');
 
 		const user = await User.findOne({ email: 'testCreateUser@example.com' });
-		expect(user ? true : false).toEqual(true);
+		let exist: boolean;
+		if (user) {
+			exist = true
+		} else {
+			exist = false;
+		}
+		expect(exist).toEqual(true);
 	});
 });

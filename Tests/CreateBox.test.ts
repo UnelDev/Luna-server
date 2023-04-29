@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import request from 'supertest';
-
-import { Admin } from '../Models/Admin';
-import { Box } from '../Models/Box';
-
+import mongoose from 'mongoose';
+import { Admin } from '../models/admin';
+import dotenv from 'dotenv';
+import { Box } from '../models/Box';
 dotenv.config();
 
 const req = request('http://localhost:8082');
@@ -28,18 +26,19 @@ afterEach(async () => {
 	await Box.deleteOne({ name: 'createBoxTest' });
 });
 
-describe('POST /NewBox', () => {
-	it('Should return a 400 if request body is not an object', async () => {
+describe('POST /newBox', () => {
+	it('should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { login:{ email: String, password: Sha512 String }, name: String, placment: String, ?slot[undefined, undefined, undefined, undefined], ?size: Number }');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'specify email and login object');
 	});
 
-	it('Should return a 400 if name is not a string', async () => {
+	it('should return 400 if name is not a string', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 123,
 				placment: '48.862725,2.287592',
@@ -49,12 +48,13 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Name must be a string');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the name must be a string');
 	});
 
-	it('Should return a 400 if placement is not a string', async () => {
+	it('should return 400 if placement is not a string', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: 123,
@@ -64,12 +64,13 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Placment must be a string');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the placment must be a string');
 	});
 
-	it('Should return a 400 if the size is specified but the slot is not', async () => {
+	it('should return 400 if size is specified but slot is not', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -80,12 +81,13 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Slot must be specified if the size is specified');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the slot must be specified if the size is specified');
 	});
 
-	it('Should return a 400 if the slot is specified but the size is not', async () => {
+	it('should return 400 if slot is sppecified but size is not', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -96,13 +98,14 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Size must be specified if the slot is specified');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the size must be specified if the slot is specified');
 	});
 
 
-	it('Should return 400 if the size does not match with the slot size', async () => {
+	it('should return 400 if size does not match with slot size', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -114,12 +117,13 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Size of the slot array is not equal to the size argument');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the size of slot array is not equal of size argument');
 	});
 
-	it('Should return a 400 if a box already exists with this name ', async () => {
+	it('should return 400 if slot if slot is a duplicate', async () => {
 		await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -131,7 +135,7 @@ describe('POST /NewBox', () => {
 				}
 			});
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -143,12 +147,13 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'A box already exists with this name');
+		expect(res.body).toHaveProperty('status', 400);
+		expect(res.body).toHaveProperty('message', 'the box with this name already exist');
 	});
 
-	it('Should save the box', async () => {
+	it('test the savig of the box', async () => {
 		const res = await req
-			.post('/api/NewBox')
+			.post('/api/newBox')
 			.send({
 				name: 'createBoxTest',
 				placment: '48.862725,2.287592',
@@ -160,8 +165,6 @@ describe('POST /NewBox', () => {
 				}
 			});
 		expect(res.status).toEqual(200);
-		expect(res.body).toHaveProperty('message', 'Box created successfully');
-
 		const box = await Box.findOne({ name: 'createBoxTest' });
 		expect(box.name).toEqual('createBoxTest');
 		expect(box.placment).toEqual('48.862725,2.287592');

@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import request from 'supertest';
-
-import { Admin } from '../Models/Admin';
-import { Box } from '../Models/Box';
-import { User } from '../Models/User';
-
+import mongoose from 'mongoose';
+import { Admin } from '../models/admin';
+import dotenv from 'dotenv';
+import { Box } from '../models/Box';
+import { User } from '../models/user';
 dotenv.config();
 
 const req = request('http://localhost:8082');
@@ -13,15 +11,15 @@ const req = request('http://localhost:8082');
 beforeAll(async () => {
 	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
-		name: 'assignTestAdmin',
-		email: 'assignTestAdmin@example.com',
+		name: 'assigntestAdmin',
+		email: 'assigntestAdmin@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await admin.save();
 
 	const user = new User({
-		name: 'assignTestUser',
-		email: 'assignTestUser@example.com',
+		name: 'assigntestUser',
+		email: 'assigntestUser@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await user.save();
@@ -42,22 +40,22 @@ afterEach(async () => {
 })
 
 afterAll(async () => {
-	await Admin.deleteOne({ email: 'assignTestAdmin@example.com' });
-	await User.deleteOne({ email: 'assignTestUser@example.com' });
+	await Admin.deleteOne({ email: 'assigntestAdmin@example.com' });
+	await User.deleteOne({ email: 'assigntestUser@example.com' });
 });
 
-describe('POST /Assign', () => {
-	it('Should return a 400 if request body is not an object', async () => {
+describe('POST /assign', () => {
+	it('should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { login: { email: String, password: Sha512 String }, name: String, IDOfUser: String, numberOfSlot: Number }');
+		expect(res.body).toHaveProperty('message', 'specify object');
 	});
 
-	it('Should return 400 if login is not defined', async () => {
+	it('should return 400 if login object is not specified', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: "createBoxTest",
 				IDOfUser: "644671ba82dc1800c84992fc",
@@ -65,15 +63,15 @@ describe('POST /Assign', () => {
 				login: {}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
+		expect(res.body).toHaveProperty('message', 'specify login object');
 	});
 
-	it('Should return 404 if email is not link to an Admin', async () => {
+	it('should return 404 if email is not link to Admin', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: 123,
-				email: 'assignTestAdmin@example.com',
+				email: 'assigntestAdmin@example.com',
 				password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF',
 				login: {
 					"email": "badTestAdmin@example.com",
@@ -84,32 +82,32 @@ describe('POST /Assign', () => {
 		expect(res.body).toHaveProperty('message', 'Admin login not found');
 	});
 
-	it('Should return 403 if password is wrong', async () => {
+	it('should return 403 if password of admin is bad', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: "createBoxTest",
 				IDOfUser: "644671ba82dc1800c84992fc",
 				numberOfSlot: 3,
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "bad"
 				}
 			});
 		expect(res.status).toEqual(403);
-		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
+		expect(res.body).toHaveProperty('message', 'bad login password');
 	});
 
 
-	it('Sould return 400 if numberOfSlot is not a number', async () => {
+	it('sould return 400 if numberOfSlot is not a number', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: "createBoxTest",
 				IDOfUser: "644671ba82dc1800c84992fc",
 				numberOfSlot: 'bad',
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -117,15 +115,15 @@ describe('POST /Assign', () => {
 		expect(res.body).toHaveProperty('message', 'numberOfSlot must be a number');
 	});
 
-	it('Sould return 400 if IDOfUser is not a string', async () => {
+	it('sould return 400 if IDOfUser is not a string', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: "createBoxTest",
 				IDOfUser: 123,
 				numberOfSlot: 1,
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -133,54 +131,54 @@ describe('POST /Assign', () => {
 		expect(res.body).toHaveProperty('message', 'IDOfUser must be a string');
 	});
 
-	it('Sould return 400 if name is not a string', async () => {
+	it('sould return 400 if name is not a string', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: 123,
 				IDOfUser: "644671ba82dc1800c84992fc",
 				numberOfSlot: 1,
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Name must be a string');
+		expect(res.body).toHaveProperty('message', 'the name must be a string');
 	});
 
-	it('Sould return 404 if user is not found', async () => {
+	it('sould return 404 if user not found', async () => {
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				name: 'assignBoxTest',
 				IDOfUser: "644671ba82dc1800c84992fc",
 				numberOfSlot: 1,
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
 		expect(res.status).toEqual(404);
-		expect(res.body).toHaveProperty('message', 'User not found');
+		expect(res.body).toHaveProperty('message', 'user not found');
 	});
 
-	it('Assign a lock', async () => {
+	it('assign a lock', async () => {
 		const id = (await Box.findOne({ name: 'assignBoxTest' })).id.valueOf();
-		const IDOfUser = (await User.findOne({ name: 'assignTestUser' })).id.valueOf();
+		const IDOfUser = (await User.findOne({ name: 'assigntestUser' })).id.valueOf();
 		const res = await req
-			.post('/api/Assign')
+			.post('/api/assign')
 			.send({
 				id: id,
 				IDOfUser: IDOfUser,
 				numberOfSlot: 1,
 				login: {
-					"email": "assignTestAdmin@example.com",
+					"email": "assigntestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
 		expect(res.status).toEqual(200);
-		expect(res.body).toHaveProperty('message', 'Slot assigned successfully');
+		expect(res.body).toHaveProperty('message', 'slot assigned with sucess');
 		expect((await Box.findOne({ name: 'assignBoxTest' })).slot[1].length).toEqual(2);
 	});
 });
