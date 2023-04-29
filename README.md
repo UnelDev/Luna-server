@@ -124,7 +124,7 @@ Type:
 ```json
 {
 	name: String,
-	placment: String,
+	placement: String,
 	size: 3,
 	slot: [null, null, null] | [[idUser String, date], [idUser String, date], [idUser String, date]],
 	login: {

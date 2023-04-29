@@ -30,7 +30,7 @@ beforeAll(async () => {
 beforeEach(async () => {
 	const box = new Box({
 		name: 'assignBoxTest',
-		placment: '48.862725,2.287592',
+		placement: '48.862725,2.287592',
 		size: 3,
 		slot: [undefined, undefined, undefined]
 	});

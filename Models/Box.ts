@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
+
 type nameOfUser = string;
 type timeToStart = Date;
+
 const BoxSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
 		unique: true
 	},
-	placment: {
+	placement: {
 		type: String,
 		required: true
 	},

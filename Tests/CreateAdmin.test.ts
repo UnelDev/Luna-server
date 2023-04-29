@@ -26,10 +26,10 @@ afterEach(async () => {
 	await Admin.deleteOne({ email: 'testCreateAdmin@example.com' });
 });
 
-describe('POST /NewAdmin', () => {
+describe('POST /CreateAdmin', () => {
 	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
 		expect(res.body).toHaveProperty('message', 'Specify { login: { email:string, password: Sha512 String }, name: String, email: String, password: String }');
@@ -37,7 +37,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 400 if the login object is not define', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 123,
 				email: 'testCreateAdmin@example.com',
@@ -50,7 +50,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 404 if the email is not linked to an Admin', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 123,
 				email: 'testCreateAdmin@example.com',
@@ -66,7 +66,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 403 if the admin password is wrong', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 123,
 				email: 'testCreateAdmin@example.com',
@@ -82,7 +82,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 400 if the name is not a string', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 123,
 				email: 'testCreateAdmin@example.com',
@@ -98,7 +98,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 400 if email is not a string', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: 123,
@@ -114,7 +114,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 400 if the email is empty', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: '',
@@ -130,7 +130,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 400 if the password is not in SHA512 format', async () => {
 		const res = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: 'testCreateAdmin@example.com',
@@ -146,7 +146,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should return a 409 if an admin with the same email already exists', async () => {
 		const res1 = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: 'testCreateAdmin@example.com',
@@ -159,7 +159,7 @@ describe('POST /NewAdmin', () => {
 		expect(res1.status).toEqual(200);
 
 		const res2 = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: 'testCreateAdmin@example.com',
@@ -175,7 +175,7 @@ describe('POST /NewAdmin', () => {
 
 	it('Should create an admin', async () => {
 		const res1 = await req
-			.post('/api/NewAdmin')
+			.post('/api/CreateAdmin')
 			.send({
 				name: 'Test Create Admin',
 				email: 'testCreateAdmin@example.com',

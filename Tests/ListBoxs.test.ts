@@ -20,7 +20,7 @@ beforeAll(async () => {
 
 	const box = new Box({
 		name: 'ListBoxsTest',
-		placment: '48.862725,2.287592',
+		placement: '48.862725,2.287592',
 		size: 3,
 		slot: [null, null, null]
 	});
