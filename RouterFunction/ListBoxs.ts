@@ -6,12 +6,12 @@ import { Log } from "../Functions/Logs";
 
 import { Box } from "../Models/Box";
 
-/*
+/**
 **{
-**	login:{
-**		username:string
-**		password:stringSha512
-**	}
+*	login:{
+*		username:string
+*		password:stringSha512
+*	}
 **}
 */
 

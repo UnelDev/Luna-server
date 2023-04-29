@@ -1,9 +1,8 @@
 
 node_modules/
-test.http
-.env
-.env
+*.env
 .todo
 *.log
 
 Tests/*.http
+*.http

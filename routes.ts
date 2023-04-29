@@ -8,6 +8,7 @@ import CreateBox from './RouterFunction/CreateBox';
 import CreateUser from './RouterFunction/CreateUser';
 import DeleteAdmin from './RouterFunction/DeleteAdmin';
 import DeleteUser from './RouterFunction/DeleteUser';
+import GetLogs from './RouterFunction/GetLogs';
 import ListBoxs from './RouterFunction/ListBoxs';
 import Login from './RouterFunction/Login';
 import LoginAdmin from './RouterFunction/LoginAdmin';
@@ -27,5 +28,6 @@ router.post('/DeleteAdmin', DeleteAdmin);
 router.post('/ListBoxs', ListBoxs);
 router.put('/ChangePassword', ChangePassword);
 router.put('/ChangeAdminPassword', ChangeAdminPassword);
+router.post('/GetLogs', GetLogs);
 
 export default router;
