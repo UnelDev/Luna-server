@@ -15,7 +15,7 @@ import { Box } from "../Models/Box";
 export default async function listUser(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 1) {
-		res.status(400).send({ message: "Specify { email: string, password: sha512string }" });
+		res.status(400).send({ message: "Specify { email: string, password: sha512 string }" });
 		return;
 	}
 
