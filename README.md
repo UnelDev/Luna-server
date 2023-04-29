@@ -256,3 +256,19 @@ best response [user, user]
 
 other response see [this](./RouterFunction/ListUser.ts)
 
+### url/api/ListAdmin
+
+type:
+
+```json
+{
+	login: {
+		email: String,
+		password: Sha512 String
+	}
+}
+```
+
+best response [Admin, Admin]
+
+other response see [this](./RouterFunction/ListAdmin.ts)
