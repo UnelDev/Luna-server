@@ -4,6 +4,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 
+import { Log } from './Functions/Logs';
 import router from './routes';
 
 dotenv.config({ path: '.env' });
@@ -13,16 +14,16 @@ let started = false;
 
 function main() {
 	if (started) {
-		console.log('Server already started');
+		Log('index.ts', 'INFORMATION', 'Server already started');
 		return;
 	}
 	started = true;
 
 	// Connect to MongoDB using Mongoose
 	mongoose.connect(process.env.URI).then(() => {
-		console.log('Successfully connected to MongoDB');
+		Log('index.ts', 'INFORMATION', 'Successfully connected to MongoDB');
 	}).catch((error) => {
-		console.log('Error connecting to MongoDB:', error);
+		Log('index.ts', 'CRITICAL', 'Error connecting to MongoDB: ' + error);
 	});
 
 	// Create an instance of the Express app
@@ -34,7 +35,7 @@ function main() {
 	// Start the Express app
 	const port = 8082;
 	app.listen(port, () => {
-		console.log(`Listening at http://localhost:${port}`);
+		Log('index.ts', 'DEBUG', `Listening at http://localhost:${port}`);
 	});
 
 	app.get('/', (req, res) => {

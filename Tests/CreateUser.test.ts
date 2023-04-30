@@ -16,10 +16,10 @@ afterEach(async () => {
 	await User.deleteOne({ email: 'testCreateUser@example.com' });
 });
 
-describe('POST /NewUser', () => {
+describe('POST /CreateUser', () => {
 	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
 		expect(res.body).toHaveProperty('message', 'Specify { name: String, email: String, password: Sha512 String }');
@@ -27,7 +27,7 @@ describe('POST /NewUser', () => {
 
 	it('Should return a 400 if name is not a string', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 123,
 				email: 'testCreateUser@example.com',
@@ -39,7 +39,7 @@ describe('POST /NewUser', () => {
 
 	it('Should return a 400 if email is not a string', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: 123,
@@ -51,7 +51,7 @@ describe('POST /NewUser', () => {
 
 	it('Should return a 400 if email is empty', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: '',
@@ -63,7 +63,7 @@ describe('POST /NewUser', () => {
 
 	it('Should return a 400 if password is not in SHA512 format', async () => {
 		const res = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -75,7 +75,7 @@ describe('POST /NewUser', () => {
 
 	it('Should return a 409 if a user with the same email already exists', async () => {
 		const res1 = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -84,7 +84,7 @@ describe('POST /NewUser', () => {
 		expect(res1.status).toEqual(200);
 
 		const res2 = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',
@@ -96,7 +96,7 @@ describe('POST /NewUser', () => {
 
 	it('Should create a user', async () => {
 		const res1 = await req
-			.post('/api/NewUser')
+			.post('/api/CreateUser')
 			.send({
 				name: 'Test Create User',
 				email: 'testCreateUser@example.com',

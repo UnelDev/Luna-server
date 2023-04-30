@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { Admin } from '../Models/Admin';
-import { Box } from '../Models/Box';
 
 dotenv.config();
 
@@ -12,38 +11,29 @@ const req = request('http://localhost:8082');
 beforeAll(async () => {
 	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
-		name: 'testListBoxsMaster',
-		email: 'testListBoxsMaster@example.com',
+		name: 'testGetLog',
+		email: 'testGetLog@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await admin.save();
-
-	const box = new Box({
-		name: 'ListBoxsTest',
-		placement: '48.862725,2.287592',
-		size: 3,
-		slot: [null, null, null]
-	});
-	await box.save();
 });
 
 afterAll(async () => {
-	await Admin.deleteOne({ email: 'testListBoxsMaster@example.com' });
-	await Box.deleteOne({ name: 'ListBoxsTest' });
+	await Admin.deleteOne({ email: 'testGetLog@example.com' });
 })
 
-describe('POST /ListBoxs', () => {
+describe('POST /GetLogs', () => {
 	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/GetLogs')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
-		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
+		expect(res.body).toHaveProperty('message', 'Specify { login: { email: string, password: Sha512 String } }');
 	});
 
-	it('Should return a 400 if login object is not defined', async () => {
+	it('Should return a 400 if login object is not define', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/GetLogs')
 			.send({
 				login: {}
 			});
@@ -51,12 +41,12 @@ describe('POST /ListBoxs', () => {
 		expect(res.body).toHaveProperty('message', 'Specify login: { email: String, password: Sha512 String }');
 	});
 
-	it('Should return a 404 if email is not linkd to an admin', async () => {
+	it('should return 404 if email is not link to Admin', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/GetLogs')
 			.send({
 				login: {
-					"email": "badtestListBoxs@example.com",
+					"email": "badTestGetLogs@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -66,10 +56,10 @@ describe('POST /ListBoxs', () => {
 
 	it('Should return a 403 if admin password is wrong', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/GetLogs')
 			.send({
 				login: {
-					"email": "testListBoxsMaster@example.com",
+					"email": "testGetLog@example.com",
 					"password": "bad"
 				}
 			});
@@ -77,16 +67,15 @@ describe('POST /ListBoxs', () => {
 		expect(res.body).toHaveProperty('message', 'Wrong confidentials');
 	});
 
-	it('Should return a list', async () => {
+	it('Should return a 200 if all is correct', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/GetLogs')
 			.send({
 				login: {
-					"email": "testListBoxsMaster@example.com",
+					"email": "testGetLog@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
 		expect(res.status).toEqual(200);
-		expect(Array.isArray(res.body)).toEqual(true);
 	});
 });

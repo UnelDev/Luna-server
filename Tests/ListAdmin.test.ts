@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { Admin } from '../Models/Admin';
-import { Box } from '../Models/Box';
 
 dotenv.config();
 
@@ -12,30 +11,21 @@ const req = request('http://localhost:8082');
 beforeAll(async () => {
 	await mongoose.connect(process.env.URI);
 	const admin = new Admin({
-		name: 'testListBoxsMaster',
-		email: 'testListBoxsMaster@example.com',
+		name: 'testlistAdmin',
+		email: 'testlistAdmin@example.com',
 		password: 'EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF'
 	});
 	await admin.save();
-
-	const box = new Box({
-		name: 'ListBoxsTest',
-		placement: '48.862725,2.287592',
-		size: 3,
-		slot: [null, null, null]
-	});
-	await box.save();
 });
 
 afterAll(async () => {
-	await Admin.deleteOne({ email: 'testListBoxsMaster@example.com' });
-	await Box.deleteOne({ name: 'ListBoxsTest' });
+	await Admin.deleteOne({ email: 'testlistAdmin@example.com' });
 })
 
-describe('POST /ListBoxs', () => {
+describe('POST /listAdmin', () => {
 	it('Should return a 400 if request body is not an object', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/listAdmin')
 			.send('invalidBody');
 		expect(res.status).toEqual(400);
 		expect(res.body).toHaveProperty('message', 'Specify { email: String, password: Sha512 String }');
@@ -43,7 +33,7 @@ describe('POST /ListBoxs', () => {
 
 	it('Should return a 400 if login object is not defined', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/listAdmin')
 			.send({
 				login: {}
 			});
@@ -53,10 +43,10 @@ describe('POST /ListBoxs', () => {
 
 	it('Should return a 404 if email is not linkd to an admin', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/listAdmin')
 			.send({
 				login: {
-					"email": "badtestListBoxs@example.com",
+					"email": "badtestlistAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
@@ -66,10 +56,10 @@ describe('POST /ListBoxs', () => {
 
 	it('Should return a 403 if admin password is wrong', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/listAdmin')
 			.send({
 				login: {
-					"email": "testListBoxsMaster@example.com",
+					"email": "testlistAdmin@example.com",
 					"password": "bad"
 				}
 			});
@@ -79,10 +69,10 @@ describe('POST /ListBoxs', () => {
 
 	it('Should return a list', async () => {
 		const res = await req
-			.post('/api/ListBoxs')
+			.post('/api/listAdmin')
 			.send({
 				login: {
-					"email": "testListBoxsMaster@example.com",
+					"email": "testlistAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});

@@ -22,7 +22,7 @@ jobs:
     - run: npm install
 
     - name: Run tests
-      run: npm test
+      run: npm run testGit
       env:
           CI: true
           URI: ${{ secrets.URI }}
