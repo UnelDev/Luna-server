@@ -157,6 +157,8 @@ Expected response : Slot attributed with success
 
 See [this](./RouterFunction/assign.ts) for errors and other cases.
 
+this request is use by admin for assign slot of box to one user
+
 ### /api/Unassign
 
 Type:
@@ -175,6 +177,8 @@ Expected response: Slot unassigned with sucess
 
 See [this](./RouterFunction/unassign.ts) for errors and other cases.
 
+this request is use by admin for unassign slot of box to one user
+
 ### /api/ReleaseSlot
 
 Type:
@@ -190,6 +194,8 @@ Type:
 ```
 
 Expected response: Slot Released successfully
+
+this request is use by user for unassign slot of box to himself
 
 See [this](./RouterFunction/ReleaseSlot.ts) for errors and other cases.
 
