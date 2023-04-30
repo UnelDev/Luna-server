@@ -6,6 +6,7 @@ import CheckAdmin from "../Functions/CheckAdmin";
 import { Log } from "../Functions/Logs";
 
 import { Box } from "../Models/Box";
+import { User } from "../Models/User";
 
 /*
 **{
@@ -48,7 +49,7 @@ export default async function Unassign(req: Request<{}, any, any, ParsedQs, Reco
 			return;
 		}
 
-		const response = await find({ name: req.body.name }, req.body.numberOfSlot);
+		const response = await find({ name: req.body.name }, req.body.numberOfSlot, req.body.login.email);
 		res.status(response.code).send({ message: response.message });
 
 	} else if (req.body.id) {
@@ -62,7 +63,7 @@ export default async function Unassign(req: Request<{}, any, any, ParsedQs, Reco
 			res.status(400).send({ message: 'Id must be a string' });
 			return;
 		}
-		const response = await find(req.body.id, req.body.numberOfSlot);
+		const response = await find(req.body.id, req.body.numberOfSlot, req.body.login.email);
 		res.status(response.code).send({ message: response.message });
 
 	} else {
@@ -73,7 +74,7 @@ export default async function Unassign(req: Request<{}, any, any, ParsedQs, Reco
 
 }
 
-async function find(key: { name: string } | String, slotNumber: number) {
+async function find(key: { name: string } | String, slotNumber: number, AdminEmail: string) {
 	let box: Document<unknown, {}, { name: string; placement: string; slot: any[]; size: number; createdAt: Date; }> & Omit<{ name: string; placement: string; slot: any[]; size: number; createdAt: Date; } & { _id: Types.ObjectId; }, never>;
 	if (typeof key == 'string') {
 		box = await Box.findById(key);
@@ -91,6 +92,32 @@ async function find(key: { name: string } | String, slotNumber: number) {
 		return { code: 400, message: 'Slot number is higher than the number of slots' }
 	}
 
+	if (!Array.isArray(box.slot[slotNumber])) {
+		Log('unassing.ts', 'WARNING', `Admin ${AdminEmail} to request the unassing of slot ${slotNumber} but the slot is not allocated`);
+		return { code: 400, message: 'Slot required is not allocated' };
+	}
+
+	if (!(box.slot[slotNumber][1] instanceof Date && !isNaN(box.slot[slotNumber][1]))) {
+		//critical beacause the user in this box is unknow
+		Log('unassing.ts', 'CRITICAL', `Admin ${AdminEmail} to request the unassing of slot ${slotNumber} but the date of reservation isn't date`);
+		return { code: 500, message: 'this slot does not contain date' };
+	}
+
+	const user = await User.findById(box.slot[slotNumber][0]);
+	if (!user) {
+		//critical beacause the user in this box is unknow
+		Log('unassing.ts', 'CRITICAL', `Admin ${AdminEmail} to request the unassing of slot ${slotNumber} but the assigned user dose not exist`);
+		return { code: 404, message: 'user not found' };
+	}
+
+	if (typeof user.timeOfUse != 'number') {
+		Log('unassing.ts', 'ERROR', `Admin ${AdminEmail} found an error, user ${user._id} does not have the correct type of timeOfUse`);
+		return { code: 500, message: 'user in this slot generate an error' };
+	}
+
+	await user.updateOne({
+		timeOfUse: user.timeOfUse + (new Date().getTime() - new Date(box.slot[slotNumber][1]).getTime())
+	})
 	box.slot[slotNumber] = null;
 	await box.save();
 

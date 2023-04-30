@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import request from 'supertest';
-
 import { Admin } from '../Models/Admin';
 import { Box } from '../Models/Box';
 import { User } from '../Models/User';
@@ -32,7 +31,7 @@ beforeEach(async () => {
 		name: 'UnassignBoxTest',
 		placement: '48.862725,2.287592',
 		size: 3,
-		slot: [undefined, undefined, undefined]
+		slot: [[(await User.findOne({ email: 'UnassignTestUser@example.com' }))._id, new Date()], undefined, undefined]
 	});
 	await box.save();
 });
@@ -60,7 +59,7 @@ describe('POST /Unassign', () => {
 			.post('/api/Unassign')
 			.send({
 				name: "createBoxTest",
-				numberOfSlot: 2,
+				numberOfSlot: 0,
 				login: {}
 			});
 		expect(res.status).toEqual(400);
@@ -72,7 +71,7 @@ describe('POST /Unassign', () => {
 			.post('/api/Unassign')
 			.send({
 				name: "createBoxTest",
-				numberOfSlot: 2,
+				numberOfSlot: 0,
 				login: {
 					"email": "badTestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
@@ -87,7 +86,7 @@ describe('POST /Unassign', () => {
 			.post('/api/Unassign')
 			.send({
 				name: "createBoxTest",
-				numberOfSlot: 2,
+				numberOfSlot: 0,
 				login: {
 					"email": "UnassignTestAdmin@example.com",
 					"password": "bad"
@@ -118,7 +117,7 @@ describe('POST /Unassign', () => {
 			.post('/api/Unassign')
 			.send({
 				name: 123,
-				numberOfSlot: 1,
+				numberOfSlot: 0,
 				login: {
 					"email": "UnassignTestAdmin@example.com",
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
@@ -128,7 +127,7 @@ describe('POST /Unassign', () => {
 		expect(res.body).toHaveProperty('message', 'Name must be a string');
 	});
 
-	it('Unassign a lock', async () => {
+	it('Sould return 400 if the slot to unassing is dosn\'t assing', async () => {
 		const id = (await Box.findOne({ name: 'UnassignBoxTest' })).id.valueOf();
 		const res = await req
 			.post('/api/Unassign')
@@ -140,8 +139,59 @@ describe('POST /Unassign', () => {
 					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
 				}
 			});
+		expect(res.status).toEqual(400);
+		expect(res.body).toHaveProperty('message', 'Slot required is not allocated');
+		expect((await Box.findOne({ name: 'UnassignBoxTest' })).slot[1]).toEqual(null);
+	});
+
+	it('Sould return 404 if the user in the slot is not real user', async () => {
+		const id = (await Box.findOne({ name: 'UnassignBoxTest' })).id.valueOf();
+		await Box.findOneAndUpdate({ name: 'UnassignBoxTest' }, { slot: [['99999999999999f9ff99ff9f', new Date()], undefined, undefined] });
+		const res = await req
+			.post('/api/Unassign')
+			.send({
+				id: id,
+				numberOfSlot: 0,
+				login: {
+					"email": "UnassignTestAdmin@example.com",
+					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
+				}
+			});
+		expect(res.status).toEqual(404);
+		expect(res.body).toHaveProperty('message', 'user not found');
+	});
+
+	it('Sould return 500 if the date in the slot is not real date', async () => {
+		const id = (await Box.findOne({ name: 'UnassignBoxTest' })).id.valueOf();
+		await Box.findOneAndUpdate({ name: 'UnassignBoxTest' }, { slot: [[(await User.findOne({ email: 'UnassignTestUser@example.com' }))._id, 'hello'], undefined, undefined] });
+		const res = await req
+			.post('/api/Unassign')
+			.send({
+				id: id,
+				numberOfSlot: 0,
+				login: {
+					"email": "UnassignTestAdmin@example.com",
+					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
+				}
+			});
+		expect(res.status).toEqual(500);
+		expect(res.body).toHaveProperty('message', 'this slot does not contain date');
+	});
+
+	it('Unassign a lock', async () => {
+		const id = (await Box.findOne({ name: 'UnassignBoxTest' })).id.valueOf();
+		const res = await req
+			.post('/api/Unassign')
+			.send({
+				id: id,
+				numberOfSlot: 0,
+				login: {
+					"email": "UnassignTestAdmin@example.com",
+					"password": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
+				}
+			});
 		expect(res.status).toEqual(200);
 		expect(res.body).toHaveProperty('message', 'Slot unassigned successfully');
-		expect((await Box.findOne({ name: 'UnassignBoxTest' })).slot[1]).toEqual(null);
+		expect((await Box.findOne({ name: 'UnassignBoxTest' })).slot[0]).toEqual(null);
 	});
 });
