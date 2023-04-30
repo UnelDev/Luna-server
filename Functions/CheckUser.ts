@@ -2,7 +2,7 @@ import { Request, Response } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { User } from "../Models/User";
 
-export default async function CheckAdmin(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
+export default async function CheckUser(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body.login != 'object' || Object.keys(req.body.login).length != 2) {
 		res.status(400).send({ status: 400, message: "Specify login: { email: String, password: Sha512 String }" });
 		return false;

@@ -17,7 +17,7 @@ type WarningLevel = 'DEBUG' | 'INFORMATION' | 'WARNING' | 'ERROR' | 'CRITICAL'
  * - WARNING: Minor impact that can be easily corrected.
  * - ERROR: Moderate impact that requires attention.
  * - CRITICAL: Significant impact that can cause damage or data loss.
- */
+*/
 export async function Log(location: string, impact: WarningLevel = 'DEBUG', text: string) {
 	if (process.env.npm_lifecycle_script.includes('jest')) {
 		return;

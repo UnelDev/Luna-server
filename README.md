@@ -175,6 +175,24 @@ Expected response: Slot unassigned with sucess
 
 See [this](./RouterFunction/unassign.ts) for errors and other cases.
 
+### /api/ReleaseSlot
+
+Type:
+
+```json
+{
+	id: IdBox String,
+	numberOfSlot: Number,
+	login: {
+		email: String,
+		password: Sha512 String
+}
+```
+
+Expected response: Slot Released successfully
+
+See [this](./RouterFunction/ReleaseSlot.ts) for errors and other cases.
+
 ### /api/Login
 
 Type:
