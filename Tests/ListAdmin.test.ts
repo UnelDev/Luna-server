@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { Admin } from '../Models/Admin';
-import { User } from '../Models/User';
 
 dotenv.config();
 
