@@ -1,7 +1,10 @@
-import request from 'supertest';
-import mongoose from 'mongoose';
-import { Admin } from '../Models/Admin';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import request from 'supertest';
+
+import { Admin } from '../Models/Admin';
+
+
 dotenv.config();
 
 const req = request('http://localhost:8082');

@@ -9,8 +9,8 @@ import { Box } from "../Models/Box";
 /**
 **{
 *	login:{
-*		username:string
-*		password:stringSha512
+*		email: String
+*		password: Sha512 String
 *	}
 **}
 */
