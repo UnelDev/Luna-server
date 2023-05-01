@@ -15,6 +15,7 @@ import LoginAdmin from './RouterFunction/LoginAdmin';
 import Unassign from './RouterFunction/Unassign';
 import ListUser from './RouterFunction/ListUser';
 import listAdmin from './RouterFunction/ListAdmin';
+import ReleaseSlot from './RouterFunction/ReleaseSlot';
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router.post('/CreateAdmin', CreateAdmin);
 router.post('/CreateBox', CreateBox);
 router.post('/Assign', Assign);
 router.post('/Unassign', Unassign);
+router.post('/ReleaseSlot', ReleaseSlot);
 router.post('/DeleteUser', DeleteUser);
 router.post('/DeleteAdmin', DeleteAdmin);
 router.post('/ListBoxs', ListBoxs);

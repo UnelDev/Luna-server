@@ -11,8 +11,17 @@ type WarningLevel = 'DEBUG' | 'INFORMATION' | 'WARNING' | 'ERROR' | 'CRITICAL'
 // Formation:
 // (2023-04-28T11:27:47.509Z) [ERROR]> bad password for test@exemple.com 
 // (2023-04-28T11:27:47.509Z) [INFORMATION]> test@exemple.com connected
-
-export async function Log(location: string, impact: WarningLevel = 'DEBUG', text: string, complement?: string) {
+/**
+ * Impact Levels:
+ * - INFORMATION: No impact on the system or user.
+ * - WARNING: Minor impact that can be easily corrected.
+ * - ERROR: Moderate impact that requires attention.
+ * - CRITICAL: Significant impact that can cause damage or data loss.
+*/
+export async function Log(location: string, impact: WarningLevel = 'DEBUG', text: string) {
+	if (process.env.npm_lifecycle_script.includes('jest')) {
+		return;
+	}
 	const date = new Date().toISOString();
 	const logDir = './log';
 	const logFilePath = path.resolve(`${logDir}/log.log`);
@@ -41,10 +50,10 @@ export async function Log(location: string, impact: WarningLevel = 'DEBUG', text
 	}
 
 	// append log in file
-	fs.appendFileSync(logFilePath, `(${date}) [${location}]> ${impact}${text}\n`);
+	fs.appendFileSync(logFilePath, `(${date}) [${location}]> ${impact} ${text}\n`);
 
 	// print log if you are in dev environment
 	if (process.env.isdev) {
-		console.log(`(${date}) [${location}]> ${coloredImpact}${text}\n`);
+		console.log(`(${date}) [${location}]> ${coloredImpact} ${text}\n`);
 	}
 }

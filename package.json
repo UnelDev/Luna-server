@@ -4,7 +4,7 @@
 	"description": "The server of LUNA.",
 	"main": "index.ts",
 	"scripts": {
-		"test": "npx jest -o --forceExit",
+		"test": "cls && npx jest -o --forceExit",
 		"testGit": "npx jest --forceExit",
 		"dev": "npx nodemon index.ts",
 		"start": "npx ts-node ."
