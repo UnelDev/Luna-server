@@ -16,11 +16,10 @@ import CheckUser from "../Functions/CheckUser";
 	numberOfSlot:number
 }
 */
-
 export default async function ReleaseSlot(req: Request<{}, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>, number>) {
 	if (typeof req.body != 'object' || Object.keys(req.body).length != 3) {
 		Log('ReleaseSlot.ts', 'WARNING', 'Invalid body');
-		res.status(400).send({ status: 400, message: "Specify { login: { username: String, password: Sha512 String }, name: String|id, numberOfSlot: Number }" });
+		res.status(400).send({ message: "Specify { login: { username: String, password: Sha512 String }, name: String|id, numberOfSlot: Number }" });
 		return;
 	}
 
